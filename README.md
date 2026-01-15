@@ -14,7 +14,7 @@ Docker image for running a Hytale dedicated server.
 
 ```bash
 mkdir hytale-server && cd hytale-server
-curl -O https://raw.githubusercontent.com/YOUR_USERNAME/hytale-server/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbom/hytale-server/main/docker-compose.yml
 ```
 
 Or manually create `docker-compose.yml` and copy the contents from this repository.
