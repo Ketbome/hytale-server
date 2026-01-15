@@ -1,0 +1,79 @@
+name: Build and Push Docker Image
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "Dockerfile"
+            - "entrypoint.sh"
+            - "config.json"
+            - ".github/workflows/docker-publish.yml"
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    REGISTRY: docker.io
+    IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Read version from config.json
+              id: config
+              run: |
+                  VERSION=$(jq -r '.version' config.json)
+                  TITLE=$(jq -r '.title' config.json)
+                  DESCRIPTION=$(jq -r '.description' config.json)
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+                  echo "title=$TITLE" >> $GITHUB_OUTPUT
+                  echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+                  echo "Version: $VERSION"
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login to Docker Hub
+              if: github.event_name != 'pull_request'
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Extract metadata
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                  tags: |
+                      type=raw,value=${{ steps.config.outputs.version }}
+                      type=raw,value=latest,enable={{is_default_branch}}
+                      type=sha,prefix=
+                  labels: |
+                      org.opencontainers.image.title=${{ steps.config.outputs.title }}
+                      org.opencontainers.image.description=${{ steps.config.outputs.description }}
+                      org.opencontainers.image.version=${{ steps.config.outputs.version }}
+
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  platforms: linux/amd64,linux/arm64
+                  push: ${{ github.event_name != 'pull_request' }}
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max

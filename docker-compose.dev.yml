@@ -1,0 +1,27 @@
+# For development only - builds image locally
+services:
+  hytale:
+    build: .
+    image: hytale-server:dev
+    container_name: hytale-server
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+      - "5520:5520/udp"
+    environment:
+      JAVA_XMS: "4G"
+      JAVA_XMX: "8G"
+      BIND_PORT: "5520"
+      BIND_ADDR: "0.0.0.0"
+      USE_G1GC: "true"
+      MAX_GC_PAUSE_MILLIS: "200"
+      G1_NEW_SIZE_PERCENT: "30"
+      G1_MAX_NEW_SIZE_PERCENT: "40"
+      G1_HEAP_REGION_SIZE: "8M"
+    volumes:
+      - ./server:/opt/hytale
+      - ./data/universe:/opt/hytale/universe
+      - ./data/mods:/opt/hytale/mods
+      - ./data/logs:/opt/hytale/logs
+      - ./data/config:/opt/hytale/config

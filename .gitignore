@@ -1,0 +1,10 @@
+# Server files (large, don't version)
+server/HytaleServer.jar
+server/Assets.zip
+server/*.aot
+
+# Server data
+data/
+
+# Logs
+*.log
