@@ -11,7 +11,7 @@ Docker image for Hytale dedicated server with web panel and auto-download.
 mkdir hytale && cd hytale
 
 # 2. Download compose file
-curl -O https://raw.githubusercontent.com/ketbom/hytale-server/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
 
 # 3. Create data folders
 mkdir -p server data/universe data/mods data/logs data/config
