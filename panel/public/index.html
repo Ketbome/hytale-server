@@ -1162,11 +1162,29 @@
     }
 
     function renderFileList(files) {
-      if (!files || files.length === 0) {
-        fileListBody.innerHTML = '<div class="file-empty">Empty directory</div>';
-        return;
-      }
       let html = '';
+
+      // Add ".." to go back (if not in root)
+      if (currentPath !== '/') {
+        html += `
+          <div class="file-item file-item-back" data-name=".." data-is-dir="true">
+            <div class="file-name">
+              <span class="file-icon folder">..</span>
+              <span>(back)</span>
+            </div>
+            <span class="file-size">-</span>
+            <div class="file-actions"></div>
+          </div>
+        `;
+      }
+
+      if (!files || files.length === 0) {
+        if (currentPath === '/') {
+          fileListBody.innerHTML = '<div class="file-empty">Empty directory</div>';
+          return;
+        }
+      }
+
       for (const file of files) {
         const icon = FILE_ICONS[file.icon] || 'FILE';
         html += `
@@ -1190,12 +1208,26 @@
         const isDir = item.dataset.isDir === 'true';
 
         item.addEventListener('dblclick', () => {
-          if (isDir) {
+          if (name === '..') {
+            // Go back one level
+            const parts = currentPath.split('/').filter(p => p);
+            parts.pop();
+            navigateTo(parts.length ? '/' + parts.join('/') : '/');
+          } else if (isDir) {
             navigateTo(currentPath === '/' ? '/' + name : currentPath + '/' + name);
           } else if (item.dataset.editable === 'true') {
             openEditor(currentPath === '/' ? '/' + name : currentPath + '/' + name);
           }
         });
+
+        // Single click for ".."
+        if (name === '..') {
+          item.addEventListener('click', () => {
+            const parts = currentPath.split('/').filter(p => p);
+            parts.pop();
+            navigateTo(parts.length ? '/' + parts.join('/') : '/');
+          });
+        }
 
         item.querySelectorAll('.file-action-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
