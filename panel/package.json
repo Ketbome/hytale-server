@@ -2,8 +2,10 @@
   "name": "hytale-panel",
   "version": "1.0.0",
   "private": true,
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js",
+    "start:legacy": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
