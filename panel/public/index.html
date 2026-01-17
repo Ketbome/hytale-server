@@ -758,6 +758,39 @@
     .editor-status.saving { color: var(--hytale-orange); }
     .editor-status.saved { color: var(--success); }
     .editor-status.error { color: var(--error); }
+
+    /* Language Selector */
+    .lang-selector {
+      display: flex;
+      background: var(--mc-dark);
+      border: 2px solid var(--mc-border-light);
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      font-family: 'VT323', monospace;
+      font-size: 14px;
+      padding: 6px 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+
+    .lang-btn:not(:last-child) {
+      border-right: 1px solid var(--mc-border-light);
+    }
+
+    .lang-btn:hover {
+      color: var(--text);
+      background: var(--mc-panel);
+    }
+
+    .lang-btn.active {
+      color: var(--hytale-yellow);
+      background: var(--mc-panel);
+    }
   </style>
 </head>
 <body>
@@ -771,6 +804,10 @@
         </div>
       </div>
       <div class="header-right">
+        <div class="lang-selector">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn active" data-lang="uk">UA</button>
+        </div>
         <span class="uptime-display" id="uptime">00:00:00</span>
         <div class="status-badge">
           <div class="status-dot" id="status-dot"></div>
@@ -932,6 +969,285 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    // ============================================
+    // TRANSLATIONS
+    // ============================================
+    const translations = {
+      en: {
+        serverPanel: 'Server Panel',
+        online: 'ONLINE',
+        offline: 'OFFLINE',
+        console: 'Console',
+        enterCommand: 'Enter command...',
+        send: 'SEND',
+        setup: 'Setup',
+        files: 'Files',
+        commands: 'Commands',
+        control: 'Control',
+        checking: 'Checking...',
+        filesReady: 'Files ready',
+        missingFiles: 'Missing files',
+        downloadFiles: 'Download Files',
+        redownload: 'Re-download',
+        downloadHint: 'Downloads ~2GB from Hytale',
+        credentialsSaved: '✓ Credentials saved',
+        noCredentials: '○ No credentials',
+        authRequired: 'Auth Required',
+        openLink: 'Open link:',
+        code: 'Code:',
+        starting: 'Starting...',
+        waitingAuth: 'Waiting auth...',
+        waiting: 'Waiting...',
+        downloading: 'Downloading...',
+        extracting: 'Extracting...',
+        done: 'Done!',
+        error: 'Error',
+        auth: 'Auth',
+        download: 'Download',
+        extract: 'Extract',
+        login: 'Login',
+        status: 'Status',
+        saveCreds: 'Save Creds',
+        server: 'Server',
+        allCommands: 'All Commands',
+        stop: 'Stop',
+        start: 'START',
+        restart: 'RESTART',
+        stopServer: 'STOP SERVER',
+        wipeData: 'WIPE DATA',
+        unknown: 'Unknown',
+        game: 'Game',
+        panel: 'Panel',
+        confirmRestart: 'Restart?',
+        confirmStop: 'Stop?',
+        confirmWipe: 'DELETE ALL DATA?',
+        confirmWipeSure: 'SURE?',
+        refresh: 'Refresh',
+        newFolder: '+ Dir',
+        upload: 'Upload',
+        dropFilesHere: 'Drop files here',
+        uploadHint: 'Max 100MB | .jar .zip .json .yaml',
+        uploading: 'Uploading',
+        name: 'Name',
+        size: 'Size',
+        loading: 'Loading...',
+        emptyDir: 'Empty directory',
+        errorLoading: 'Error loading',
+        back: '(back)',
+        edit: 'Edit',
+        folderName: 'Folder name:',
+        backup: 'Backup',
+        save: 'Save',
+        close: 'Close',
+        ready: 'Ready',
+        saving: 'Saving...',
+        saved: 'Saved',
+        savedWithBackup: 'Saved (backup created)',
+        cannotEditBinary: 'Cannot edit binary file',
+        fileSaved: 'File saved',
+        saveFailed: 'Save failed',
+        folderCreated: 'Folder created',
+        deleted: 'Deleted',
+        renamed: 'Renamed',
+        uploaded: 'Uploaded',
+        uploadFailed: 'Failed',
+        uploadError: 'Upload error',
+        confirmDelete: 'Delete',
+        restarted: 'Restarted',
+        stopped: 'Stopped',
+        started: 'Started',
+        dataWiped: 'Data wiped!',
+        failed: 'failed',
+        downloadComplete: 'Download complete!',
+        filesReadyMsg: '✓ Files ready!'
+      },
+      uk: {
+        serverPanel: 'Панель сервера',
+        online: 'ОНЛАЙН',
+        offline: 'ОФЛАЙН',
+        console: 'Консоль',
+        enterCommand: 'Введіть команду...',
+        send: 'НАДІСЛАТИ',
+        setup: 'Налаштування',
+        files: 'Файли',
+        commands: 'Команди',
+        control: 'Керування',
+        checking: 'Перевірка...',
+        filesReady: 'Файли готові',
+        missingFiles: 'Відсутні файли',
+        downloadFiles: 'Завантажити файли',
+        redownload: 'Перезавантажити',
+        downloadHint: 'Завантажує ~2ГБ з Hytale',
+        credentialsSaved: '✓ Облікові дані збережено',
+        noCredentials: '○ Немає облікових даних',
+        authRequired: 'Потрібна авторизація',
+        openLink: 'Відкрийте посилання:',
+        code: 'Код:',
+        starting: 'Запуск...',
+        waitingAuth: 'Очікування авторизації...',
+        waiting: 'Очікування...',
+        downloading: 'Завантаження...',
+        extracting: 'Розпакування...',
+        done: 'Готово!',
+        error: 'Помилка',
+        auth: 'Авторизація',
+        download: 'Завантаження',
+        extract: 'Розпакування',
+        login: 'Увійти',
+        status: 'Статус',
+        saveCreds: 'Зберегти',
+        server: 'Сервер',
+        allCommands: 'Усі команди',
+        stop: 'Стоп',
+        start: 'СТАРТ',
+        restart: 'РЕСТАРТ',
+        stopServer: 'ЗУПИНИТИ СЕРВЕР',
+        wipeData: 'ОЧИСТИТИ ДАНІ',
+        unknown: 'Невідомо',
+        game: 'Гра',
+        panel: 'Панель',
+        confirmRestart: 'Перезапустити?',
+        confirmStop: 'Зупинити?',
+        confirmWipe: 'ВИДАЛИТИ ВСІ ДАНІ?',
+        confirmWipeSure: 'ВПЕВНЕНІ?',
+        refresh: 'Оновити',
+        newFolder: '+ Папка',
+        upload: 'Завантажити',
+        dropFilesHere: 'Перетягніть файли сюди',
+        uploadHint: 'Макс 100МБ | .jar .zip .json .yaml',
+        uploading: 'Завантаження',
+        name: 'Назва',
+        size: 'Розмір',
+        loading: 'Завантаження...',
+        emptyDir: 'Порожня папка',
+        errorLoading: 'Помилка завантаження',
+        back: '(назад)',
+        edit: 'Редагувати',
+        folderName: 'Назва папки:',
+        backup: 'Резервна копія',
+        save: 'Зберегти',
+        close: 'Закрити',
+        ready: 'Готово',
+        saving: 'Збереження...',
+        saved: 'Збережено',
+        savedWithBackup: 'Збережено (створено резервну копію)',
+        cannotEditBinary: 'Неможливо редагувати бінарний файл',
+        fileSaved: 'Файл збережено',
+        saveFailed: 'Помилка збереження',
+        folderCreated: 'Папку створено',
+        deleted: 'Видалено',
+        renamed: 'Перейменовано',
+        uploaded: 'Завантажено',
+        uploadFailed: 'Помилка',
+        uploadError: 'Помилка завантаження',
+        confirmDelete: 'Видалити',
+        restarted: 'Перезапущено',
+        stopped: 'Зупинено',
+        started: 'Запущено',
+        dataWiped: 'Дані очищено!',
+        failed: 'помилка',
+        downloadComplete: 'Завантаження завершено!',
+        filesReadyMsg: '✓ Файли готові!'
+      }
+    };
+
+    let currentLang = localStorage.getItem('hytale-panel-lang') || 'uk';
+
+    function t(key) {
+      return translations[currentLang][key] || translations.en[key] || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('hytale-panel-lang', lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      updateAllTranslations();
+    }
+
+    function updateAllTranslations() {
+      // Header
+      document.querySelector('.logo-subtitle').textContent = t('serverPanel');
+
+      // Status
+      const isOnline = statusDot.classList.contains('online');
+      statusText.textContent = isOnline ? t('online') : t('offline');
+
+      // Console
+      document.querySelector('.card-header').textContent = t('console');
+      cmdInput.placeholder = t('enterCommand');
+      $('send-btn').textContent = t('send');
+
+      // Tabs
+      document.querySelector('[data-tab="setup"]').textContent = t('setup');
+      document.querySelector('[data-tab="files"]').textContent = t('files');
+      document.querySelector('[data-tab="commands"]').textContent = t('commands');
+      document.querySelector('[data-tab="control"]').textContent = t('control');
+
+      // Setup tab
+      const isReady = fileStatus.classList.contains('ready');
+      setupText.textContent = isReady ? t('filesReady') : t('missingFiles');
+      if (!downloadBtn.disabled) {
+        downloadBtn.textContent = isReady ? t('redownload') : t('downloadFiles');
+      }
+      document.querySelector('.hint').textContent = t('downloadHint');
+
+      // Auth box
+      document.querySelector('.auth-box h3').textContent = t('authRequired');
+      document.querySelectorAll('.auth-box p')[0].textContent = t('openLink');
+      document.querySelectorAll('.auth-box p')[1].textContent = t('code');
+
+      // Progress steps
+      document.querySelector('#step-auth span:last-child').textContent = t('auth');
+      document.querySelector('#step-download span:last-child').textContent = t('download');
+      document.querySelector('#step-extract span:last-child').textContent = t('extract');
+      document.querySelector('#step-complete span:last-child').textContent = t('done');
+
+      // Commands tab
+      document.querySelectorAll('.cmd-label')[0].textContent = t('auth');
+      document.querySelectorAll('.cmd-label')[1].textContent = t('server');
+      document.querySelectorAll('.quick-btn span:first-child')[0].textContent = t('login');
+      document.querySelectorAll('.quick-btn span:first-child')[1].textContent = t('status');
+      document.querySelectorAll('.quick-btn span:first-child')[2].textContent = t('saveCreds');
+      document.querySelectorAll('.quick-btn span:first-child')[3].textContent = t('allCommands');
+      document.querySelectorAll('.quick-btn span:first-child')[4].textContent = t('stop');
+
+      // Control tab
+      $('start-btn').textContent = t('start');
+      $('restart-btn').textContent = t('restart');
+      $('stop-btn').textContent = t('stopServer');
+      $('wipe-btn').textContent = t('wipeData');
+
+      // Info compact
+      document.querySelectorAll('.info-label')[0].textContent = t('status');
+      document.querySelectorAll('.info-label')[1].textContent = t('game');
+      document.querySelectorAll('.info-label')[2].textContent = t('panel');
+
+      // Files tab
+      $('btn-refresh').title = t('refresh');
+      $('btn-new-folder').textContent = t('newFolder');
+      $('btn-upload').textContent = t('upload');
+      document.querySelector('.upload-text').textContent = t('dropFilesHere');
+      document.querySelector('.upload-hint').textContent = t('uploadHint');
+      document.querySelector('.file-col-name').textContent = t('name');
+      document.querySelector('.file-col-size').textContent = t('size');
+
+      // Editor
+      document.querySelector('.editor-checkbox').innerHTML = `<input type="checkbox" id="editor-backup" ${editorBackup.checked ? 'checked' : ''}> ${t('backup')}`;
+      $('btn-save').textContent = t('save');
+      $('btn-close-editor').textContent = t('close');
+
+      // Update file list back button text
+      const backItem = document.querySelector('.file-item-back span:nth-child(2)');
+      if (backItem) backItem.textContent = t('back');
+    }
+
+    // Language selector events
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+
     const socket = io();
     const $ = id => document.getElementById(id);
     const consoleEl = $('console'), cmdInput = $('cmd-input');
@@ -962,8 +1278,8 @@
         .replace(/^\[\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2}\s+\w+\]\s*/gm, '');
     }
 
-    function getLogType(t) {
-      const l = t.toLowerCase();
+    function getLogType(text) {
+      const l = text.toLowerCase();
       if (l.includes('error') || l.includes('failed') || l.includes('exception')) return 'error';
       if (l.includes('warn')) return 'warn';
       if (l.includes('oauth') || l.includes('user_code') || l.includes('authorization')) return 'auth';
@@ -973,11 +1289,11 @@
 
     function addLog(text, type = '') {
       cleanLog(text).split('\n').forEach(line => {
-        const t = line.trim();
-        if (!t) return;
+        const trimmed = line.trim();
+        if (!trimmed) return;
         const div = document.createElement('div');
-        div.className = 'log-line ' + (type || getLogType(t));
-        div.textContent = t;
+        div.className = 'log-line ' + (type || getLogType(trimmed));
+        div.textContent = trimmed;
         consoleEl.appendChild(div);
       });
       consoleEl.scrollTop = consoleEl.scrollHeight;
@@ -985,7 +1301,7 @@
     }
 
     function showToast(msg, type = '') {
-      document.querySelectorAll('.toast').forEach(t => t.remove());
+      document.querySelectorAll('.toast').forEach(el => el.remove());
       const toast = document.createElement('div');
       toast.className = 'toast ' + type;
       toast.textContent = msg;
@@ -1007,13 +1323,13 @@
       ai.textContent = f.hasAssets ? '✓' : '✗'; ai.className = 'icon ' + (f.hasAssets ? 'ok' : 'missing');
       fileStatus.className = 'file-status ' + (f.ready ? 'ready' : 'missing');
       setupIcon.textContent = f.ready ? '✓' : '!';
-      setupText.textContent = f.ready ? 'Files ready' : 'Missing files';
-      downloadBtn.textContent = f.ready ? 'Re-download' : 'Download Files';
+      setupText.textContent = f.ready ? t('filesReady') : t('missingFiles');
+      downloadBtn.textContent = f.ready ? t('redownload') : t('downloadFiles');
     }
 
-    function parseAuth(t) {
-      const u = t.match(/https:\/\/oauth\.accounts\.hytale\.com[^\s]+/);
-      const c = t.match(/(?:user_code[=:]\s*|code:\s*)([A-Za-z0-9]+)/i);
+    function parseAuth(text) {
+      const u = text.match(/https:\/\/oauth\.accounts\.hytale\.com\S+/);
+      const c = text.match(/(?:user_code[=:]\s*|code:\s*)([A-Za-z0-9]+)/i);
       if (u || c) {
         authBox.classList.add('visible');
         if (u) { authLink.href = u[0]; authLink.textContent = u[0]; }
@@ -1034,12 +1350,12 @@
 
     function stopDlTimer() { if (dlTimer) { clearInterval(dlTimer); dlTimer = null; } }
 
-    socket.on('log', t => addLog(t.trim()));
+    socket.on('log', msg => addLog(msg.trim()));
 
     socket.on('status', s => {
       statusDot.className = 'status-dot' + (s.running ? ' online' : '');
-      statusText.textContent = s.running ? 'ONLINE' : 'OFFLINE';
-      infoStatus.textContent = s.status || 'Unknown';
+      statusText.textContent = s.running ? t('online') : t('offline');
+      infoStatus.textContent = s.status || t('unknown');
       uptimeEl.textContent = formatUptime(s.startedAt);
     });
 
@@ -1047,52 +1363,52 @@
 
     socket.on('downloader-auth', a => {
       authStatus.className = 'auth-status ' + (a ? 'ok' : 'missing');
-      authStatus.textContent = a ? '✓ Credentials saved' : '○ No credentials';
+      authStatus.textContent = a ? t('credentialsSaved') : t('noCredentials');
     });
 
     socket.on('download-status', d => {
       progressSection.classList.add('visible');
       if (d.status === 'starting') {
         downloadBtn.disabled = true;
-        downloadBtn.innerHTML = '<span class="spinner"></span> Starting...';
-        startDlTimer(); progressStatus.textContent = 'Starting...'; progressFill.style.width = '5%';
+        downloadBtn.innerHTML = '<span class="spinner"></span> ' + t('starting');
+        startDlTimer(); progressStatus.textContent = t('starting'); progressFill.style.width = '5%';
         setStep('step-auth', 'active');
       } else if (d.status === 'auth-required') {
         addLog(d.message, 'auth'); parseAuth(d.message);
-        progressStatus.textContent = 'Waiting auth...'; progressFill.style.width = '10%';
-        downloadBtn.disabled = false; downloadBtn.textContent = 'Waiting...';
+        progressStatus.textContent = t('waitingAuth'); progressFill.style.width = '10%';
+        downloadBtn.disabled = false; downloadBtn.textContent = t('waiting');
       } else if (d.status === 'output') {
         addLog(d.message);
         if (d.message.toLowerCase().includes('download')) {
           setStep('step-auth', 'done'); setStep('step-download', 'active');
-          progressStatus.textContent = 'Downloading...'; progressFill.style.width = '30%';
-          downloadBtn.innerHTML = '<span class="spinner"></span> Downloading...';
+          progressStatus.textContent = t('downloading'); progressFill.style.width = '30%';
+          downloadBtn.innerHTML = '<span class="spinner"></span> ' + t('downloading');
         }
         const p = d.message.match(/(\d+)%/);
         if (p) { progressFill.style.width = (30 + parseInt(p[1]) * 0.5) + '%'; progressStatus.textContent = p[1] + '%'; }
       } else if (d.status === 'extracting') {
         addLog(d.message, 'info'); setStep('step-download', 'done'); setStep('step-extract', 'active');
-        progressStatus.textContent = 'Extracting...'; progressFill.style.width = '85%';
-        downloadBtn.innerHTML = '<span class="spinner"></span> Extracting...';
+        progressStatus.textContent = t('extracting'); progressFill.style.width = '85%';
+        downloadBtn.innerHTML = '<span class="spinner"></span> ' + t('extracting');
       } else if (d.status === 'complete') {
         stopDlTimer();
         ['step-auth', 'step-download', 'step-extract', 'step-complete'].forEach(s => setStep(s, 'done'));
-        progressStatus.textContent = 'Done!'; progressFill.style.width = '100%';
-        downloadBtn.disabled = false; downloadBtn.textContent = 'Re-download';
+        progressStatus.textContent = t('done'); progressFill.style.width = '100%';
+        downloadBtn.disabled = false; downloadBtn.textContent = t('redownload');
         authBox.classList.remove('visible');
-        showToast('Download complete!'); addLog('✓ Files ready!', 'info');
+        showToast(t('downloadComplete')); addLog(t('filesReadyMsg'), 'info');
       } else if (d.status === 'done' || d.status === 'error') {
-        stopDlTimer(); downloadBtn.disabled = false; downloadBtn.textContent = 'Download Files';
-        if (d.status === 'error') { progressStatus.textContent = 'Error'; showToast(d.message, 'error'); addLog('✗ ' + d.message, 'error'); }
+        stopDlTimer(); downloadBtn.disabled = false; downloadBtn.textContent = t('downloadFiles');
+        if (d.status === 'error') { progressStatus.textContent = t('error'); showToast(d.message, 'error'); addLog('✗ ' + d.message, 'error'); }
       }
     });
 
     socket.on('command-result', r => { if (r.error) { addLog('Error: ' + r.error, 'error'); showToast('Failed', 'error'); }});
 
     socket.on('action-status', s => {
-      const m = { restart: 'Restarted', stop: 'Stopped', start: 'Started', wipe: 'Data wiped!' };
-      if (s.success) showToast(m[s.action] || 'Done');
-      else if (s.error) showToast(s.action + ' failed', 'error');
+      const m = { restart: t('restarted'), stop: t('stopped'), start: t('started'), wipe: t('dataWiped') };
+      if (s.success) showToast(m[s.action] || t('done'));
+      else if (s.error) showToast(s.action + ' ' + t('failed'), 'error');
     });
 
     socket.on('error', m => { addLog(m, 'error'); showToast(m, 'error'); });
@@ -1108,9 +1424,9 @@
     document.querySelectorAll('.quick-btn').forEach(b => b.addEventListener('click', () => sendCmd(b.dataset.cmd)));
     downloadBtn.addEventListener('click', () => { authBox.classList.remove('visible'); progressSection.classList.remove('visible'); socket.emit('download'); });
     $('start-btn').addEventListener('click', () => socket.emit('start'));
-    $('restart-btn').addEventListener('click', () => { if (confirm('Restart?')) socket.emit('restart'); });
-    $('stop-btn').addEventListener('click', () => { if (confirm('Stop?')) sendCmd('/stop'); });
-    $('wipe-btn').addEventListener('click', () => { if (confirm('DELETE ALL DATA?')) if (confirm('SURE?')) socket.emit('wipe'); });
+    $('restart-btn').addEventListener('click', () => { if (confirm(t('confirmRestart'))) socket.emit('restart'); });
+    $('stop-btn').addEventListener('click', () => { if (confirm(t('confirmStop'))) sendCmd('/stop'); });
+    $('wipe-btn').addEventListener('click', () => { if (confirm(t('confirmWipe'))) if (confirm(t('confirmWipeSure'))) socket.emit('wipe'); });
 
     // ============================================
     // FILE MANAGER
@@ -1157,7 +1473,7 @@
 
     function navigateTo(pathStr) {
       currentPath = pathStr;
-      fileListBody.innerHTML = '<div class="file-empty">Loading...</div>';
+      fileListBody.innerHTML = '<div class="file-empty">' + t('loading') + '</div>';
       socket.emit('files:list', pathStr);
     }
 
@@ -1170,7 +1486,7 @@
           <div class="file-item file-item-back" data-name=".." data-is-dir="true">
             <div class="file-name">
               <span class="file-icon folder">..</span>
-              <span>(back)</span>
+              <span>${t('back')}</span>
             </div>
             <span class="file-size">-</span>
             <div class="file-actions"></div>
@@ -1180,7 +1496,7 @@
 
       if (!files || files.length === 0) {
         if (currentPath === '/') {
-          fileListBody.innerHTML = '<div class="file-empty">Empty directory</div>';
+          fileListBody.innerHTML = '<div class="file-empty">' + t('emptyDir') + '</div>';
           return;
         }
       }
@@ -1195,7 +1511,7 @@
             </div>
             <span class="file-size">${formatSize(file.size)}</span>
             <div class="file-actions">
-              ${file.editable ? '<button class="file-action-btn" data-action="edit">Edit</button>' : ''}
+              ${file.editable ? '<button class="file-action-btn" data-action="edit">' + t('edit') + '</button>' : ''}
               <button class="file-action-btn danger" data-action="del">X</button>
             </div>
           </div>
@@ -1207,27 +1523,23 @@
         const name = item.dataset.name;
         const isDir = item.dataset.isDir === 'true';
 
-        item.addEventListener('dblclick', () => {
+        // Single click for directories, double click for files
+        item.addEventListener('click', () => {
           if (name === '..') {
-            // Go back one level
             const parts = currentPath.split('/').filter(p => p);
             parts.pop();
             navigateTo(parts.length ? '/' + parts.join('/') : '/');
           } else if (isDir) {
             navigateTo(currentPath === '/' ? '/' + name : currentPath + '/' + name);
-          } else if (item.dataset.editable === 'true') {
-            openEditor(currentPath === '/' ? '/' + name : currentPath + '/' + name);
           }
         });
 
-        // Single click for ".."
-        if (name === '..') {
-          item.addEventListener('click', () => {
-            const parts = currentPath.split('/').filter(p => p);
-            parts.pop();
-            navigateTo(parts.length ? '/' + parts.join('/') : '/');
-          });
-        }
+        // Double click to edit files
+        item.addEventListener('dblclick', () => {
+          if (!isDir && item.dataset.editable === 'true') {
+            openEditor(currentPath === '/' ? '/' + name : currentPath + '/' + name);
+          }
+        });
 
         item.querySelectorAll('.file-action-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
@@ -1237,7 +1549,7 @@
             if (action === 'edit') {
               openEditor(filePath);
             } else if (action === 'del') {
-              if (confirm(`Delete "${name}"?`)) {
+              if (confirm(t('confirmDelete') + ` "${name}"?`)) {
                 socket.emit('files:delete', filePath);
               }
             }
@@ -1249,7 +1561,7 @@
     function openEditor(filePath) {
       currentEditingFile = filePath;
       editorFilename.textContent = filePath;
-      editorStatus.textContent = 'Loading...';
+      editorStatus.textContent = t('loading');
       editorStatus.className = 'editor-status';
       editorContent.value = '';
       editorModal.classList.add('visible');
@@ -1263,7 +1575,7 @@
 
     function saveFile() {
       if (!currentEditingFile) return;
-      editorStatus.textContent = 'Saving...';
+      editorStatus.textContent = t('saving');
       editorStatus.className = 'editor-status saving';
       socket.emit('files:save', {
         path: currentEditingFile,
@@ -1278,56 +1590,56 @@
         updateBreadcrumb(result.path);
         renderFileList(result.files);
       } else {
-        showToast('Error: ' + result.error, 'error');
-        fileListBody.innerHTML = '<div class="file-empty">Error loading</div>';
+        showToast(t('error') + ': ' + result.error, 'error');
+        fileListBody.innerHTML = '<div class="file-empty">' + t('errorLoading') + '</div>';
       }
     });
 
     socket.on('files:read-result', (result) => {
       if (result.success) {
         editorContent.value = result.content;
-        editorStatus.textContent = 'Ready';
+        editorStatus.textContent = t('ready');
         editorStatus.className = 'editor-status';
       } else if (result.binary) {
-        editorStatus.textContent = 'Cannot edit binary file';
+        editorStatus.textContent = t('cannotEditBinary');
         editorStatus.className = 'editor-status error';
       } else {
-        editorStatus.textContent = 'Error: ' + result.error;
+        editorStatus.textContent = t('error') + ': ' + result.error;
         editorStatus.className = 'editor-status error';
       }
     });
 
     socket.on('files:save-result', (result) => {
       if (result.success) {
-        editorStatus.textContent = result.backup?.success ? 'Saved (backup created)' : 'Saved';
+        editorStatus.textContent = result.backup?.success ? t('savedWithBackup') : t('saved');
         editorStatus.className = 'editor-status saved';
-        showToast('File saved');
+        showToast(t('fileSaved'));
       } else {
-        editorStatus.textContent = 'Error: ' + result.error;
+        editorStatus.textContent = t('error') + ': ' + result.error;
         editorStatus.className = 'editor-status error';
-        showToast('Save failed', 'error');
+        showToast(t('saveFailed'), 'error');
       }
     });
 
     socket.on('files:mkdir-result', (result) => {
-      if (result.success) { showToast('Folder created'); navigateTo(currentPath); }
-      else showToast('Error: ' + result.error, 'error');
+      if (result.success) { showToast(t('folderCreated')); navigateTo(currentPath); }
+      else showToast(t('error') + ': ' + result.error, 'error');
     });
 
     socket.on('files:delete-result', (result) => {
-      if (result.success) { showToast('Deleted'); navigateTo(currentPath); }
-      else showToast('Error: ' + result.error, 'error');
+      if (result.success) { showToast(t('deleted')); navigateTo(currentPath); }
+      else showToast(t('error') + ': ' + result.error, 'error');
     });
 
     socket.on('files:rename-result', (result) => {
-      if (result.success) { showToast('Renamed'); navigateTo(currentPath); }
-      else showToast('Error: ' + result.error, 'error');
+      if (result.success) { showToast(t('renamed')); navigateTo(currentPath); }
+      else showToast(t('error') + ': ' + result.error, 'error');
     });
 
     // Toolbar buttons
     $('btn-refresh').addEventListener('click', () => navigateTo(currentPath));
     $('btn-new-folder').addEventListener('click', () => {
-      const name = prompt('Folder name:');
+      const name = prompt(t('folderName'));
       if (name) socket.emit('files:mkdir', currentPath === '/' ? '/' + name : currentPath + '/' + name);
     });
     $('btn-upload').addEventListener('click', () => uploadZone.classList.toggle('visible'));
@@ -1379,7 +1691,7 @@
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        uploadProgressText.textContent = `Uploading ${file.name}...`;
+        uploadProgressText.textContent = t('uploading') + ` ${file.name}...`;
         uploadProgressFill.style.width = '10%';
 
         const formData = new FormData();
@@ -1392,12 +1704,12 @@
 
           if (result.success) {
             uploadProgressFill.style.width = '100%';
-            showToast(`Uploaded: ${file.name}`);
+            showToast(t('uploaded') + `: ${file.name}`);
           } else {
-            showToast(`Failed: ${result.error}`, 'error');
+            showToast(t('uploadFailed') + `: ${result.error}`, 'error');
           }
         } catch (e) {
-          showToast(`Upload error: ${e.message}`, 'error');
+          showToast(t('uploadError') + `: ${e.message}`, 'error');
         }
       }
 
@@ -1412,6 +1724,12 @@
     document.querySelector('[data-tab="files"]').addEventListener('click', () => {
       if (fileListBody.textContent.includes('Loading')) navigateTo('/');
     });
+
+    // Initialize language on page load
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === currentLang);
+    });
+    updateAllTranslations();
 
     socket.emit('check-files');
   </script>
