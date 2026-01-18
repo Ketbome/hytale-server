@@ -4,6 +4,7 @@ const App = {
   lastCmdTime: 0,
   dlStartTime: null,
   dlTimer: null,
+  clockTimer: null,
   initialized: false,
 
   elements: {},
@@ -31,8 +32,9 @@ const App = {
     this.bindEvents();
     this.bindSocketHandlers();
     this.initLanguage();
+    this.startClock();
 
-    ConsoleManager.init('console');
+    ConsoleManager.init('console', this.socket);
     FileManager.init(this.socket);
     ModManager.init(this.socket);
 
@@ -46,6 +48,7 @@ const App = {
       statusText: $('status-text'),
       infoStatus: $('info-status'),
       uptimeEl: $('uptime'),
+      clockTime: $('clock-time'),
       fileStatus: $('file-status'),
       setupIcon: $('setup-icon'),
       setupText: $('setup-text'),
@@ -323,6 +326,18 @@ const App = {
     }
   },
 
+  startClock() {
+    const updateClock = () => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      this.elements.clockTime.textContent = `${h}:${m}:${s}`;
+    };
+    updateClock();
+    this.clockTimer = setInterval(updateClock, 1000);
+  },
+
   initLanguage() {
     document.body.setAttribute('data-lang', getLang());
     $('lang-select').value = getLang();
@@ -337,13 +352,15 @@ const App = {
 
     // Header
     document.querySelector('.logo-subtitle').textContent = t('serverPanel');
+    $('server-clock').title = t('serverTime');
 
     // Status
     const isOnline = el.statusDot.classList.contains('online');
     el.statusText.textContent = isOnline ? t('online') : t('offline');
 
     // Console
-    document.querySelector('.card-header').textContent = t('console');
+    document.querySelector('.card-header > span').textContent = t('console');
+    $('console-clear').title = t('clearConsole');
     el.cmdInput.placeholder = t('enterCommand');
     $('send-btn').textContent = t('send');
 

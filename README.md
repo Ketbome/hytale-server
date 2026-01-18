@@ -29,7 +29,7 @@ docker compose up -d
 
 The panel requires login. Default credentials:
 - **User**: `admin`
-- **Pass**: `changeme`
+- **Pass**: `admin`
 
 ⚠️ **Change these in your `.env` file before deploying!**
 
@@ -50,20 +50,24 @@ BIND_PORT=5520
 
 # Panel Auth
 PANEL_USER=admin
-PANEL_PASS=changeme
+PANEL_PASS=admin
 JWT_SECRET=optional-random-string
+
+# Timezone (for correct log timestamps)
+TZ=America/New_York
 ```
 
 ### All Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
+| `TZ` | `UTC` | Timezone for logs ([list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)) |
 | `JAVA_XMS` | `4G` | Minimum RAM |
 | `JAVA_XMX` | `8G` | Maximum RAM |
 | `BIND_PORT` | `5520` | Game UDP port |
 | `AUTO_DOWNLOAD` | `true` | Auto-download game |
 | `PANEL_USER` | `admin` | Panel username |
-| `PANEL_PASS` | `changeme` | Panel password |
+| `PANEL_PASS` | `admin` | Panel password |
 | `PANEL_PORT` | `3000` | Panel HTTP port |
 
 ### RAM Guide

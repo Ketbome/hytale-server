@@ -34,6 +34,6 @@ describe('Config', () => {
 
   test('maxUploadSize is reasonable', () => {
     expect(config.files.maxUploadSize).toBeGreaterThan(0);
-    expect(config.files.maxUploadSize).toBeLessThanOrEqual(100 * 1024 * 1024);
+    expect(config.files.maxUploadSize).toBeLessThanOrEqual(500 * 1024 * 1024);
   });
 });

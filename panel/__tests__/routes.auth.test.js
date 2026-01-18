@@ -21,7 +21,7 @@ describe('Auth Routes', () => {
     test('returns token with valid credentials', async () => {
       const res = await request(app)
         .post('/auth/login')
-        .send({ username: 'admin', password: 'changeme' });
+        .send({ username: 'admin', password: 'admin' });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -46,7 +46,7 @@ describe('Auth Routes', () => {
       // Login first
       const loginRes = await request(app)
         .post('/auth/login')
-        .send({ username: 'admin', password: 'changeme' });
+        .send({ username: 'admin', password: 'admin' });
 
       res = await request(app)
         .get('/auth/status')

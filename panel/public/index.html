@@ -56,6 +56,10 @@
             <option value="uk">Українська</option>
           </select>
         </div>
+        <div class="server-clock" id="server-clock" title="Server Time">
+          <span class="clock-label">🕐</span>
+          <span class="clock-time" id="clock-time">--:--:--</span>
+        </div>
         <span class="uptime-display" id="uptime">00:00:00</span>
         <div class="status-badge">
           <div class="status-dot" id="status-dot"></div>
@@ -68,7 +72,10 @@
     <div class="grid">
       <div class="main">
         <div class="card">
-          <div class="card-header">Console</div>
+          <div class="card-header">
+            <span>Console</span>
+            <button class="console-clear-btn" id="console-clear" title="Clear">✕</button>
+          </div>
           <div class="console" id="console"></div>
           <div class="command-bar">
             <input type="text" id="cmd-input" placeholder="Enter command..." autocomplete="off">
@@ -142,7 +149,7 @@
               <div class="upload-content">
                 <div class="upload-icon">⬆</div>
                 <div class="upload-text">Drop files here</div>
-                <div class="upload-hint">Max 100MB | .jar .zip .json .yaml</div>
+                <div class="upload-hint">Max 500MB | .zip .jar .json .yaml .dat .png ...</div>
                 <input type="file" id="file-input" style="display:none" multiple>
               </div>
               <div class="upload-progress" id="upload-progress">

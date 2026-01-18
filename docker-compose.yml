@@ -9,6 +9,7 @@ services:
     ports:
       - "${BIND_PORT:-5520}:${BIND_PORT:-5520}/udp"
     environment:
+      TZ: ${TZ:-UTC}
       JAVA_XMS: ${JAVA_XMS:-4G}
       JAVA_XMX: ${JAVA_XMX:-8G}
       BIND_PORT: ${BIND_PORT:-5520}
@@ -30,10 +31,11 @@ services:
     ports:
       - "${PANEL_PORT:-3000}:${PANEL_PORT:-3000}"
     environment:
+      TZ: ${TZ:-UTC}
       CONTAINER_NAME: ${CONTAINER_NAME:-hytale-server}
       PANEL_PORT: ${PANEL_PORT:-3000}
       PANEL_USER: ${PANEL_USER:-admin}
-      PANEL_PASS: ${PANEL_PASS:-changeme}
+      PANEL_PASS: ${PANEL_PASS:-admin}
       JWT_SECRET: ${JWT_SECRET:-}
       MODTALE_API_KEY: ${MODTALE_API_KEY:-}
     volumes:

@@ -32,7 +32,7 @@ io.use(socketAuth);
 setupSocketHandlers(io);
 
 // Warn about default credentials
-if (config.auth.username === "admin" && config.auth.password === "changeme") {
+if (config.auth.username === "admin" && config.auth.password === "admin") {
   console.warn("\n⚠️  WARNING: Using default credentials!");
   console.warn("   Set PANEL_USER and PANEL_PASS environment variables.\n");
 }

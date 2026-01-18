@@ -6,7 +6,8 @@ const FileManager = {
 
   FILE_ICONS: {
     folder: 'DIR', java: 'JAR', archive: 'ZIP', json: 'JSON',
-    yaml: 'YML', config: 'CFG', text: 'TXT', log: 'LOG', image: 'IMG', file: 'FILE'
+    yaml: 'YML', config: 'CFG', text: 'TXT', log: 'LOG', image: 'IMG',
+    script: 'SCR', data: 'DAT', audio: 'SND', file: 'FILE'
   },
 
   init(socket) {

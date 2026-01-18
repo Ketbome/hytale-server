@@ -32,8 +32,8 @@ describe('Files Service', () => {
 
     test('blocks dangerous file types', () => {
       expect(files.isAllowedUpload('virus.exe')).toBe(false);
-      expect(files.isAllowedUpload('script.sh')).toBe(false);
-      expect(files.isAllowedUpload('malware.bat')).toBe(false);
+      expect(files.isAllowedUpload('malware.dll')).toBe(false);
+      expect(files.isAllowedUpload('hack.com')).toBe(false);
     });
 
     test('handles case insensitivity', () => {
