@@ -254,6 +254,8 @@ module.exports = {
   sanitizePath,
   getRelativePath,
   isAllowedUpload,
+  isEditable,
+  getFileIcon,
   listDirectory,
   createDirectory,
   deleteItem,
