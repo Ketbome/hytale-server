@@ -133,6 +133,23 @@ header {
 
 .header-right { display: flex; align-items: center; gap: 12px; }
 
+.server-clock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--mc-darker);
+  padding: 6px 10px;
+  border: 2px solid var(--mc-border-light);
+}
+
+.clock-label { font-size: 12px; }
+
+.clock-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--hytale-yellow);
+}
+
 .uptime-display {
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
@@ -192,7 +209,21 @@ header {
   letter-spacing: 1px;
   color: var(--hytale-yellow);
   text-shadow: 2px 2px 0 var(--mc-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.console-clear-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+  background: var(--mc-dark);
+  border: 1px solid var(--mc-border-light);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.console-clear-btn:hover { border-color: var(--error); color: var(--error); }
 
 /* Console */
 .console {
@@ -217,6 +248,7 @@ header {
 .log-line.warn { color: var(--warning); }
 .log-line.info { color: var(--success); }
 .log-line.cmd { color: var(--hytale-cyan); }
+.log-time { color: #666; font-size: 11px; }
 .log-line.auth {
   color: var(--hytale-yellow);
   background: rgba(245, 166, 35, 0.15);
@@ -637,6 +669,9 @@ header {
 .file-icon.java { color: #f89820; background: rgba(248, 152, 32, 0.2); }
 .file-icon.archive { color: var(--hytale-cyan); background: rgba(78, 205, 196, 0.2); }
 .file-icon.json, .file-icon.yaml, .file-icon.config { color: var(--mc-green-light); background: rgba(124, 179, 66, 0.2); }
+.file-icon.script { color: #e91e63; background: rgba(233, 30, 99, 0.2); }
+.file-icon.data { color: #9c27b0; background: rgba(156, 39, 176, 0.2); }
+.file-icon.audio { color: #00bcd4; background: rgba(0, 188, 212, 0.2); }
 
 .file-size {
   font-size: 11px;

@@ -115,6 +115,35 @@ async function getLogs(options = {}) {
   });
 }
 
+async function getLogsHistory(tail = 500) {
+  const c = await getContainer();
+  if (!c) throw new Error("Container not found");
+  
+  return new Promise((resolve, reject) => {
+    c.logs({
+      follow: false,
+      stdout: true,
+      stderr: true,
+      tail,
+      timestamps: true
+    }, (err, buffer) => {
+      if (err) return reject(err);
+      
+      if (!buffer || buffer.length === 0) {
+        return resolve([]);
+      }
+      
+      // Container has tty: true, so logs come as plain text (no 8-byte header)
+      const text = buffer.toString('utf8');
+      const lines = text.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+      
+      resolve(lines);
+    });
+  });
+}
+
 async function getArchive(path) {
   const c = await getContainer();
   if (!c) throw new Error("Container not found");
@@ -136,6 +165,7 @@ module.exports = {
   stop,
   start,
   getLogs,
+  getLogsHistory,
   getArchive,
   putArchive
 };

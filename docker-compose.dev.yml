@@ -37,7 +37,7 @@ services:
       CONTAINER_NAME: ${CONTAINER_NAME:-hytale-server}
       PANEL_PORT: ${PANEL_PORT:-3000}
       PANEL_USER: ${PANEL_USER:-admin}
-      PANEL_PASS: ${PANEL_PASS:-changeme}
+      PANEL_PASS: ${PANEL_PASS:-admin}
       JWT_SECRET: ${JWT_SECRET:-}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro

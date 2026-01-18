@@ -52,7 +52,7 @@ const translations = {
     newFolder: '+ Dir',
     upload: 'Upload',
     dropFilesHere: 'Drop files here',
-    uploadHint: 'Max 100MB | .jar .zip .json .yaml',
+    uploadHint: 'Max 500MB | .zip .jar .json .yaml .dat .png ...',
     uploading: 'Uploading',
     name: 'Name',
     size: 'Size',
@@ -85,7 +85,9 @@ const translations = {
     dataWiped: 'Data wiped!',
     failed: 'failed',
     downloadComplete: 'Download complete!',
-    filesReadyMsg: '✓ Files ready!'
+    filesReadyMsg: '✓ Files ready!',
+    serverTime: 'Server Time',
+    clearConsole: 'Clear'
   },
   es: {
     serverPanel: 'Panel de Servidor',
@@ -140,7 +142,7 @@ const translations = {
     newFolder: '+ Carpeta',
     upload: 'Subir',
     dropFilesHere: 'Arrastra archivos aquí',
-    uploadHint: 'Máx 100MB | .jar .zip .json .yaml',
+    uploadHint: 'Máx 500MB | .zip .jar .json .yaml .dat .png ...',
     uploading: 'Subiendo',
     name: 'Nombre',
     size: 'Tamaño',
@@ -174,6 +176,8 @@ const translations = {
     failed: 'falló',
     downloadComplete: '¡Descarga completa!',
     filesReadyMsg: '✓ ¡Archivos listos!',
+    serverTime: 'Hora del Servidor',
+    clearConsole: 'Limpiar',
     username: 'Usuario',
     password: 'Contraseña',
     logout: 'Salir',
@@ -233,7 +237,7 @@ const translations = {
     newFolder: '+ Папка',
     upload: 'Завантажити',
     dropFilesHere: 'Перетягніть файли сюди',
-    uploadHint: 'Макс 100МБ | .jar .zip .json .yaml',
+    uploadHint: 'Макс 500МБ | .zip .jar .json .yaml .dat .png ...',
     uploading: 'Завантаження',
     name: 'Назва',
     size: 'Розмір',
@@ -266,7 +270,9 @@ const translations = {
     dataWiped: 'Дані очищено!',
     failed: 'помилка',
     downloadComplete: 'Завантаження завершено!',
-    filesReadyMsg: '✓ Файли готові!'
+    filesReadyMsg: '✓ Файли готові!',
+    serverTime: 'Час сервера',
+    clearConsole: 'Очистити'
   }
 };
 

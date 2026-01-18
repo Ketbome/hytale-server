@@ -69,7 +69,7 @@ router.get("/status", requireAuth, (req, res) => {
 router.get("/check-defaults", (req, res) => {
   const usingDefaults = 
     config.auth.username === "admin" && 
-    config.auth.password === "changeme";
+    config.auth.password === "admin";
   
   res.json({ usingDefaults });
 });

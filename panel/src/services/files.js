@@ -37,11 +37,18 @@ function getFileIcon(filename, isDirectory) {
   if (isDirectory) return "folder";
   const ext = path.extname(filename).toLowerCase();
   const icons = {
-    ".jar": "java", ".zip": "archive", ".json": "json",
-    ".yaml": "yaml", ".yml": "yaml", ".properties": "config",
-    ".cfg": "config", ".conf": "config", ".xml": "config",
-    ".toml": "config", ".ini": "config", ".txt": "text",
-    ".log": "log", ".png": "image", ".jpg": "image"
+    ".jar": "java", 
+    ".zip": "archive", ".tar": "archive", ".gz": "archive", ".7z": "archive", ".rar": "archive",
+    ".json": "json",
+    ".yaml": "yaml", ".yml": "yaml", 
+    ".properties": "config", ".cfg": "config", ".conf": "config", 
+    ".xml": "config", ".toml": "config", ".ini": "config",
+    ".txt": "text", ".md": "text",
+    ".log": "log",
+    ".png": "image", ".jpg": "image", ".jpeg": "image", ".gif": "image", ".webp": "image",
+    ".lua": "script", ".js": "script", ".sh": "script", ".bat": "script",
+    ".dat": "data", ".nbt": "data", ".mca": "data", ".mcr": "data", ".db": "data", ".ldb": "data",
+    ".ogg": "audio", ".mp3": "audio", ".wav": "audio"
   };
   return icons[ext] || "file";
 }
