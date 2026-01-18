@@ -5,6 +5,29 @@ const ConsoleManager = {
 
   init(elementId) {
     this.el = $(elementId);
+    this.bindControls();
+  },
+
+  bindControls() {
+    const filter = $('console-filter');
+    const clearBtn = $('console-clear');
+
+    if (filter) {
+      filter.addEventListener('change', () => {
+        this.maxLines = parseInt(filter.value, 10);
+        this.trimLines();
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => this.clear());
+    }
+  },
+
+  trimLines() {
+    while (this.el.children.length > this.maxLines) {
+      this.el.removeChild(this.el.firstChild);
+    }
   },
 
   getTimestamp() {
@@ -37,11 +60,7 @@ const ConsoleManager = {
     });
 
     this.el.scrollTop = this.el.scrollHeight;
-
-    // Limit lines
-    while (this.el.children.length > this.maxLines) {
-      this.el.removeChild(this.el.firstChild);
-    }
+    this.trimLines();
   },
 
   clear() {

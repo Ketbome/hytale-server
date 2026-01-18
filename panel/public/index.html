@@ -72,7 +72,18 @@
     <div class="grid">
       <div class="main">
         <div class="card">
-          <div class="card-header">Console</div>
+          <div class="card-header">
+            <span>Console</span>
+            <div class="console-controls">
+              <select class="console-filter" id="console-filter" title="Max lines">
+                <option value="100">100</option>
+                <option value="500" selected>500</option>
+                <option value="1000">1000</option>
+                <option value="2000">2000</option>
+              </select>
+              <button class="console-clear-btn" id="console-clear" title="Clear">✕</button>
+            </div>
+          </div>
           <div class="console" id="console"></div>
           <div class="command-bar">
             <input type="text" id="cmd-input" placeholder="Enter command..." autocomplete="off">

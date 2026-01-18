@@ -209,7 +209,39 @@ header {
   letter-spacing: 1px;
   color: var(--hytale-yellow);
   text-shadow: 2px 2px 0 var(--mc-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.console-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.console-filter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 4px 6px;
+  background: var(--mc-dark);
+  border: 1px solid var(--mc-border-light);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.console-filter:hover { border-color: var(--hytale-orange); color: var(--text); }
+
+.console-clear-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+  background: var(--mc-dark);
+  border: 1px solid var(--mc-border-light);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.console-clear-btn:hover { border-color: var(--error); color: var(--error); }
 
 /* Console */
 .console {

@@ -86,7 +86,9 @@ const translations = {
     failed: 'failed',
     downloadComplete: 'Download complete!',
     filesReadyMsg: '✓ Files ready!',
-    serverTime: 'Server Time'
+    serverTime: 'Server Time',
+    maxLines: 'Max lines',
+    clearConsole: 'Clear'
   },
   es: {
     serverPanel: 'Panel de Servidor',
@@ -176,6 +178,8 @@ const translations = {
     downloadComplete: '¡Descarga completa!',
     filesReadyMsg: '✓ ¡Archivos listos!',
     serverTime: 'Hora del Servidor',
+    maxLines: 'Máx líneas',
+    clearConsole: 'Limpiar',
     username: 'Usuario',
     password: 'Contraseña',
     logout: 'Salir',
@@ -269,7 +273,9 @@ const translations = {
     failed: 'помилка',
     downloadComplete: 'Завантаження завершено!',
     filesReadyMsg: '✓ Файли готові!',
-    serverTime: 'Час сервера'
+    serverTime: 'Час сервера',
+    maxLines: 'Макс рядків',
+    clearConsole: 'Очистити'
   }
 };
 

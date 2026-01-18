@@ -326,7 +326,9 @@ const App = {
     el.statusText.textContent = isOnline ? t('online') : t('offline');
 
     // Console
-    document.querySelector('.card-header').textContent = t('console');
+    document.querySelector('.card-header > span').textContent = t('console');
+    $('console-filter').title = t('maxLines');
+    $('console-clear').title = t('clearConsole');
     el.cmdInput.placeholder = t('enterCommand');
     $('send-btn').textContent = t('send');
 
