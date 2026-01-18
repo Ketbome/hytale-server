@@ -32,7 +32,7 @@ module.exports = {
       // Archives (worlds, backups)
       ".jar", ".zip", ".tar", ".gz", ".7z", ".rar",
       // Config files
-      ".json", ".yaml", ".yml", ".properties", ".txt", 
+      ".json", ".yaml", ".yml", ".properties", ".txt",
       ".cfg", ".conf", ".xml", ".toml", ".ini",
       // Scripts
       ".lua", ".js", ".sh", ".bat",
@@ -43,5 +43,13 @@ module.exports = {
       // Docs
       ".md", ".log", ".csv"
     ]
+  },
+  mods: {
+    basePath: "/opt/hytale/mods",
+    metadataFile: "/opt/hytale/mods.json",
+    maxModSize: 50 * 1024 * 1024
+  },
+  modtale: {
+    apiKey: process.env.MODTALE_API_KEY || null
   }
 };

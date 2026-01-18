@@ -87,7 +87,52 @@ const translations = {
     downloadComplete: 'Download complete!',
     filesReadyMsg: '✓ Files ready!',
     serverTime: 'Server Time',
-    clearConsole: 'Clear'
+    clearConsole: 'Clear',
+    // Mods
+    mods: 'Mods',
+    configured: 'Configured',
+    notConfigured: 'Not configured',
+    apiKeySaved: 'API key saved',
+    enterApiKey: 'Enter API key',
+    configureApiFirst: 'Configure API key first',
+    searchForMods: 'Search for mods',
+    searching: 'Searching...',
+    searchError: 'Search failed',
+    noModsFound: 'No mods found',
+    noModsInstalled: 'No mods installed',
+    install: 'Install',
+    installed: 'Installed',
+    installing: 'Installing...',
+    modInstalled: 'Mod installed!',
+    installFailed: 'Install failed',
+    remove: 'Remove',
+    modUninstalled: 'Mod removed',
+    enable: 'Enable',
+    disable: 'Disable',
+    modEnabled: 'Mod enabled',
+    modDisabled: 'Mod disabled',
+    confirmUninstall: 'Remove this mod?',
+    noVersionAvailable: 'No version available',
+    page: 'Page',
+    browse: 'Browse',
+    search: 'Search',
+    local: 'Local',
+    updates: 'Updates',
+    update: 'Update',
+    updateAvailable: 'Update available',
+    updatesAvailable: '{count} update(s) available',
+    noUpdates: 'All mods are up to date',
+    modUpdated: 'Mod updated!',
+    updateFailed: 'Update failed',
+    prev: 'Prev',
+    next: 'Next',
+    allTypes: 'All Types',
+    typePlugin: 'Plugins',
+    typeData: 'Data',
+    typeArt: 'Art',
+    typeSave: 'Saves',
+    typeModpack: 'Modpacks',
+    checkUpdates: 'Updates'
   },
   es: {
     serverPanel: 'Panel de Servidor',
@@ -182,7 +227,52 @@ const translations = {
     password: 'Contraseña',
     logout: 'Salir',
     sessionExpired: 'Sesión expirada. Inicia sesión nuevamente.',
-    defaultCredsWarning: '⚠️ Usando credenciales por defecto. Configura PANEL_USER y PANEL_PASS.'
+    defaultCredsWarning: '⚠️ Usando credenciales por defecto. Configura PANEL_USER y PANEL_PASS.',
+    // Mods
+    mods: 'Mods',
+    configured: 'Configurado',
+    notConfigured: 'No configurado',
+    apiKeySaved: 'Clave API guardada',
+    enterApiKey: 'Ingresa clave API',
+    configureApiFirst: 'Configura la clave API primero',
+    searchForMods: 'Buscar mods',
+    searching: 'Buscando...',
+    searchError: 'Error en búsqueda',
+    noModsFound: 'No se encontraron mods',
+    noModsInstalled: 'No hay mods instalados',
+    install: 'Instalar',
+    installed: 'Instalado',
+    installing: 'Instalando...',
+    modInstalled: '¡Mod instalado!',
+    installFailed: 'Error al instalar',
+    remove: 'Eliminar',
+    modUninstalled: 'Mod eliminado',
+    enable: 'Activar',
+    disable: 'Desactivar',
+    modEnabled: 'Mod activado',
+    modDisabled: 'Mod desactivado',
+    confirmUninstall: '¿Eliminar este mod?',
+    noVersionAvailable: 'Sin versión disponible',
+    page: 'Página',
+    browse: 'Explorar',
+    search: 'Buscar',
+    local: 'Local',
+    updates: 'Actualizaciones',
+    update: 'Actualizar',
+    updateAvailable: 'Actualización disponible',
+    updatesAvailable: '{count} actualización(es) disponible(s)',
+    noUpdates: 'Todos los mods están actualizados',
+    modUpdated: '¡Mod actualizado!',
+    updateFailed: 'Error al actualizar',
+    prev: 'Ant',
+    next: 'Sig',
+    allTypes: 'Todos',
+    typePlugin: 'Plugins',
+    typeData: 'Datos',
+    typeArt: 'Arte',
+    typeSave: 'Guardados',
+    typeModpack: 'Modpacks',
+    checkUpdates: 'Actualizaciones'
   },
   uk: {
     serverPanel: 'Панель сервера',
@@ -272,7 +362,52 @@ const translations = {
     downloadComplete: 'Завантаження завершено!',
     filesReadyMsg: '✓ Файли готові!',
     serverTime: 'Час сервера',
-    clearConsole: 'Очистити'
+    clearConsole: 'Очистити',
+    // Mods
+    mods: 'Моди',
+    configured: 'Налаштовано',
+    notConfigured: 'Не налаштовано',
+    apiKeySaved: 'API ключ збережено',
+    enterApiKey: 'Введіть API ключ',
+    configureApiFirst: 'Спочатку налаштуйте API ключ',
+    searchForMods: 'Пошук модів',
+    searching: 'Пошук...',
+    searchError: 'Помилка пошуку',
+    noModsFound: 'Моди не знайдено',
+    noModsInstalled: 'Моди не встановлено',
+    install: 'Встановити',
+    installed: 'Встановлено',
+    installing: 'Встановлення...',
+    modInstalled: 'Мод встановлено!',
+    installFailed: 'Помилка встановлення',
+    remove: 'Видалити',
+    modUninstalled: 'Мод видалено',
+    enable: 'Увімкнути',
+    disable: 'Вимкнути',
+    modEnabled: 'Мод увімкнено',
+    modDisabled: 'Мод вимкнено',
+    confirmUninstall: 'Видалити цей мод?',
+    noVersionAvailable: 'Немає доступної версії',
+    page: 'Сторінка',
+    browse: 'Огляд',
+    search: 'Пошук',
+    local: 'Локальний',
+    updates: 'Оновлення',
+    update: 'Оновити',
+    updateAvailable: 'Доступне оновлення',
+    updatesAvailable: 'Доступно {count} оновлень',
+    noUpdates: 'Усі моди оновлені',
+    modUpdated: 'Мод оновлено!',
+    updateFailed: 'Помилка оновлення',
+    prev: 'Назад',
+    next: 'Далі',
+    allTypes: 'Усі типи',
+    typePlugin: 'Плагіни',
+    typeData: 'Дані',
+    typeArt: 'Арт',
+    typeSave: 'Збереження',
+    typeModpack: 'Збірки',
+    checkUpdates: 'Оновлення'
   }
 };
 
@@ -280,6 +415,18 @@ let currentLang = localStorage.getItem('hytale-panel-lang') || 'en';
 
 function t(key) {
   return translations[currentLang][key] || translations.en[key] || key;
+}
+
+function translateDataAttributes() {
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  // Translate placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
 }
 
 function setLanguage(lang) {

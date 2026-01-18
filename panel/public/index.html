@@ -82,6 +82,7 @@
             <button id="send-btn">SEND</button>
           </div>
         </div>
+        <button class="btn-show-sidebar" id="btn-show-sidebar" title="Show Panel">☰</button>
       </div>
 
       <div class="sidebar">
@@ -89,6 +90,7 @@
           <div class="tabs-header">
             <button class="tab-btn active" data-tab="setup">Setup</button>
             <button class="tab-btn" data-tab="files">Files</button>
+            <button class="tab-btn" data-tab="mods">Mods</button>
             <button class="tab-btn" data-tab="commands">Commands</button>
             <button class="tab-btn" data-tab="control">Control</button>
           </div>
@@ -168,6 +170,48 @@
             </div>
           </div>
 
+          <!-- Mods Tab -->
+          <div class="tab-content" id="tab-mods">
+            <!-- View Toggle & Check Updates -->
+            <div class="mods-view-toggle">
+              <span class="mods-api-dot" id="mods-api-status" title="Modtale API"></span>
+              <button class="mc-btn small active" id="btn-view-installed" data-i18n="installed">Installed</button>
+              <button class="mc-btn small" id="btn-view-browse" data-i18n="browse">Browse</button>
+              <button class="mc-btn small" id="btn-check-updates">⟳ <span data-i18n="checkUpdates">Updates</span></button>
+            </div>
+
+            <!-- Search (shown in browse mode) -->
+            <div class="mods-search hidden" id="mods-search">
+              <input type="text" class="mods-search-input" id="mods-search-input" data-i18n-placeholder="searchForMods" placeholder="Search mods...">
+              <select class="mods-filter-select" id="mods-classification-filter">
+                <option value="" data-i18n="allTypes">All Types</option>
+                <option value="PLUGIN" data-i18n="typePlugin">Plugins</option>
+                <option value="DATA" data-i18n="typeData">Data</option>
+                <option value="ART" data-i18n="typeArt">Art</option>
+                <option value="SAVE" data-i18n="typeSave">Saves</option>
+                <option value="MODPACK" data-i18n="typeModpack">Modpacks</option>
+              </select>
+              <button class="mc-btn small" id="btn-search-mods" data-i18n="search">Search</button>
+            </div>
+
+            <!-- Installed Mods List -->
+            <div class="mods-list" id="installed-mods-list">
+              <div class="mods-empty" id="mods-loading" data-i18n="loading">Loading...</div>
+            </div>
+
+            <!-- Search Results (hidden by default) -->
+            <div class="mods-list hidden" id="search-mods-list">
+              <div class="mods-empty" data-i18n="searchForMods">Search for mods</div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mods-pagination hidden" id="mods-pagination">
+              <button class="mc-btn small" id="btn-prev-page" disabled>&lt; <span data-i18n="prev">Prev</span></button>
+              <span class="mods-page-info" id="mods-page-info">Page 1</span>
+              <button class="mc-btn small" id="btn-next-page"><span data-i18n="next">Next</span> &gt;</button>
+            </div>
+          </div>
+
           <!-- Commands Tab -->
           <div class="tab-content" id="tab-commands">
             <div class="cmd-section">
@@ -197,6 +241,11 @@
               <div class="info-row"><span class="info-label">Game</span><span class="info-value">5520/UDP</span></div>
               <div class="info-row"><span class="info-label">Panel</span><span class="info-value">3000/TCP</span></div>
             </div>
+          </div>
+
+          <div class="sidebar-toolbar">
+            <button class="sidebar-btn" id="btn-expand-panel" title="Expand">⤢</button>
+            <button class="sidebar-btn" id="btn-hide-sidebar" title="Hide">✕</button>
           </div>
         </div>
       </div>
@@ -228,6 +277,7 @@
   <script src="/js/utils.js"></script>
   <script src="/js/console.js"></script>
   <script src="/js/fileManager.js"></script>
+  <script src="/js/modManager.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/auth.js"></script>
 </body>
