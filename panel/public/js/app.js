@@ -4,6 +4,7 @@ const App = {
   lastCmdTime: 0,
   dlStartTime: null,
   dlTimer: null,
+  clockTimer: null,
   initialized: false,
 
   elements: {},
@@ -31,6 +32,7 @@ const App = {
     this.bindEvents();
     this.bindSocketHandlers();
     this.initLanguage();
+    this.startClock();
 
     ConsoleManager.init('console');
     FileManager.init(this.socket);
@@ -45,6 +47,7 @@ const App = {
       statusText: $('status-text'),
       infoStatus: $('info-status'),
       uptimeEl: $('uptime'),
+      clockTime: $('clock-time'),
       fileStatus: $('file-status'),
       setupIcon: $('setup-icon'),
       setupText: $('setup-text'),
@@ -293,6 +296,18 @@ const App = {
     }
   },
 
+  startClock() {
+    const updateClock = () => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      this.elements.clockTime.textContent = `${h}:${m}:${s}`;
+    };
+    updateClock();
+    this.clockTimer = setInterval(updateClock, 1000);
+  },
+
   initLanguage() {
     document.body.setAttribute('data-lang', getLang());
     $('lang-select').value = getLang();
@@ -304,6 +319,7 @@ const App = {
 
     // Header
     document.querySelector('.logo-subtitle').textContent = t('serverPanel');
+    $('server-clock').title = t('serverTime');
 
     // Status
     const isOnline = el.statusDot.classList.contains('online');

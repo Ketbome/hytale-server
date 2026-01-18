@@ -85,7 +85,8 @@ const translations = {
     dataWiped: 'Data wiped!',
     failed: 'failed',
     downloadComplete: 'Download complete!',
-    filesReadyMsg: '✓ Files ready!'
+    filesReadyMsg: '✓ Files ready!',
+    serverTime: 'Server Time'
   },
   es: {
     serverPanel: 'Panel de Servidor',
@@ -174,6 +175,7 @@ const translations = {
     failed: 'falló',
     downloadComplete: '¡Descarga completa!',
     filesReadyMsg: '✓ ¡Archivos listos!',
+    serverTime: 'Hora del Servidor',
     username: 'Usuario',
     password: 'Contraseña',
     logout: 'Salir',
@@ -266,7 +268,8 @@ const translations = {
     dataWiped: 'Дані очищено!',
     failed: 'помилка',
     downloadComplete: 'Завантаження завершено!',
-    filesReadyMsg: '✓ Файли готові!'
+    filesReadyMsg: '✓ Файли готові!',
+    serverTime: 'Час сервера'
   }
 };
 

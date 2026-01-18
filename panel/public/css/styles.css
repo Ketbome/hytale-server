@@ -133,6 +133,23 @@ header {
 
 .header-right { display: flex; align-items: center; gap: 12px; }
 
+.server-clock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--mc-darker);
+  padding: 6px 10px;
+  border: 2px solid var(--mc-border-light);
+}
+
+.clock-label { font-size: 12px; }
+
+.clock-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--hytale-yellow);
+}
+
 .uptime-display {
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
