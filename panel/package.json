@@ -14,7 +14,7 @@
     "multer": "^2.0.2",
     "tar-stream": "^3.1.7",
     "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.6"
   }
 }
