@@ -120,6 +120,21 @@ t('keyName'); // Returns translated string
 2. Update `docker-compose.yml` with `${VAR:-default}`
 3. Update `panel/src/config/index.js` if backend needs it
 
+### ARM64 Support
+
+- Auto-downloader is **x64 only** (skipped on ARM64)
+- Server (Java) runs natively on ARM64
+- Users must manually copy `HytaleServer.jar` and `Assets.zip`
+
+### Server Arguments
+
+Server args are configured in `entrypoint.sh`. Some options were removed because they're not supported by current Hytale server:
+- ❌ `--max-players` (not available)
+- ❌ `--view-distance` (not available)
+- ❌ `--name` (not available)
+
+Use `SERVER_EXTRA_ARGS` env var for custom server arguments (e.g. `--mods mods`).
+
 ## Don'ts
 
 - ❌ Don't use TypeScript (keep it simple)

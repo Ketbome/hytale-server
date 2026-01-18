@@ -16,6 +16,7 @@ services:
       BIND_ADDR: ${BIND_ADDR:-0.0.0.0}
       AUTO_DOWNLOAD: ${AUTO_DOWNLOAD:-true}
       USE_G1GC: ${USE_G1GC:-true}
+      SERVER_EXTRA_ARGS: ${SERVER_EXTRA_ARGS:-}
     volumes:
       - ./server:/opt/hytale
       - /etc/machine-id:/etc/machine-id:ro

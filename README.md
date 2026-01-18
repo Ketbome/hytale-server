@@ -65,7 +65,8 @@ TZ=America/New_York
 | `JAVA_XMS` | `4G` | Minimum RAM |
 | `JAVA_XMX` | `8G` | Maximum RAM |
 | `BIND_PORT` | `5520` | Game UDP port |
-| `AUTO_DOWNLOAD` | `true` | Auto-download game |
+| `AUTO_DOWNLOAD` | `true` | Auto-download game (x64 only) |
+| `SERVER_EXTRA_ARGS` | - | Extra server args (e.g. `--mods mods`) |
 | `PANEL_USER` | `admin` | Panel username |
 | `PANEL_PASS` | `admin` | Panel password |
 | `PANEL_PORT` | `3000` | Panel HTTP port |
@@ -90,9 +91,38 @@ TZ=America/New_York
 
 ## Manual Download
 
-If auto-download fails, get files from https://hytale.com and place in `./server/`:
+If auto-download fails (or on ARM64), get files from https://hytale.com and place in `./server/`:
 - `HytaleServer.jar`
 - `Assets.zip`
+
+## ARM64 (Apple Silicon, Raspberry Pi, etc.)
+
+The auto-downloader is **not available on ARM64** (binary is x64 only). You must download files manually:
+
+```bash
+# 1. Download from https://hytale.com on another machine
+# 2. Copy to your ARM64 server
+scp HytaleServer.jar Assets.zip user@arm-server:~/hytale/server/
+```
+
+The server itself (Java) runs natively on ARM64.
+
+## Mods
+
+Place mods in `./server/mods/` folder. Use `SERVER_EXTRA_ARGS` to configure:
+
+```env
+# .env
+SERVER_EXTRA_ARGS=--mods mods
+```
+
+Or mount a custom mods folder in `docker-compose.yml`:
+
+```yaml
+volumes:
+  - ./server:/opt/hytale
+  - ./my-mods:/opt/hytale/mods
+```
 
 ## Commands
 
