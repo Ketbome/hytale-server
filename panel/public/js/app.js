@@ -34,7 +34,7 @@ const App = {
     this.initLanguage();
     this.startClock();
 
-    ConsoleManager.init('console');
+    ConsoleManager.init('console', this.socket);
     FileManager.init(this.socket);
 
     this.socket.emit('check-files');

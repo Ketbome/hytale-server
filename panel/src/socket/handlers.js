@@ -11,10 +11,18 @@ function setupSocketHandlers(io) {
     socket.emit("files", await files.checkServerFiles());
     socket.emit("downloader-auth", await files.checkAuth());
 
+    // Send initial log history
+    try {
+      const history = await docker.getLogsHistory(500);
+      socket.emit("logs:history", { logs: history, initial: true });
+    } catch (e) {
+      console.error("Failed to get log history:", e.message);
+    }
+
     // Log streaming
     let logStream = null;
 
-    async function connectLogStream(tail = 100) {
+    async function connectLogStream(tail = 0) {
       if (logStream) {
         try { logStream.destroy(); } catch (e) { /* ignore */ }
         logStream = null;
@@ -81,6 +89,16 @@ function setupSocketHandlers(io) {
     socket.on("check-files", async () => {
       socket.emit("files", await files.checkServerFiles());
       socket.emit("downloader-auth", await files.checkAuth());
+    });
+
+    // Request more log history
+    socket.on("logs:more", async ({ count = 200 }) => {
+      try {
+        const history = await docker.getLogsHistory(count);
+        socket.emit("logs:history", { logs: history, initial: false });
+      } catch (e) {
+        socket.emit("logs:history", { logs: [], error: e.message });
+      }
     });
 
     socket.on("wipe", async () => {

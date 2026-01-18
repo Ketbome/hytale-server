@@ -1,18 +1,19 @@
 // Console module
 const ConsoleManager = {
   el: null,
-  history: [],
-  visibleCount: 200,
-  chunkSize: 100,
-  maxHistory: 10000,
+  socket: null,
+  loadedCount: 0,
   isLoadingMore: false,
   autoScroll: true,
+  hasMoreHistory: true,
 
-  init(elementId) {
+  init(elementId, socket) {
     this.el = $(elementId);
-    this.history = [];
-    this.visibleCount = 200;
+    this.socket = socket;
+    this.loadedCount = 0;
+    this.hasMoreHistory = true;
     this.bindControls();
+    this.bindSocketHandlers();
   },
 
   bindControls() {
@@ -21,11 +22,9 @@ const ConsoleManager = {
 
     // Lazy load on scroll up
     this.el.addEventListener('scroll', function() {
-      // Check if scrolled to top
-      if (this.scrollTop < 50 && !self.isLoadingMore) {
+      if (this.scrollTop < 50 && !self.isLoadingMore && self.hasMoreHistory) {
         self.loadMore();
       }
-      // Auto-scroll detection: if user is near bottom, enable auto-scroll
       const nearBottom = this.scrollHeight - this.scrollTop - this.clientHeight < 50;
       self.autoScroll = nearBottom;
     });
@@ -37,45 +36,65 @@ const ConsoleManager = {
     }
   },
 
-  loadMore() {
-    const totalHistory = this.history.length;
-    const currentlyShowing = this.el.children.length;
+  bindSocketHandlers() {
+    const self = this;
     
-    if (currentlyShowing >= totalHistory) return; // Nothing more to load
-    
-    this.isLoadingMore = true;
-    const oldScrollHeight = this.el.scrollHeight;
-    
-    // Calculate how many more to show
-    const startIdx = Math.max(0, totalHistory - currentlyShowing - this.chunkSize);
-    const endIdx = totalHistory - currentlyShowing;
-    const toLoad = this.history.slice(startIdx, endIdx);
-    
-    // Prepend older logs
-    const fragment = document.createDocumentFragment();
-    toLoad.forEach(log => {
-      fragment.appendChild(this.createLogElement(log));
+    this.socket.on('logs:history', function(data) {
+      if (data.error) {
+        console.error('Failed to load logs:', data.error);
+        return;
+      }
+      
+      if (data.initial) {
+        self.el.innerHTML = '';
+        self.loadedCount = 0;
+      }
+      
+      const oldScrollHeight = self.el.scrollHeight;
+      const wasAtBottom = self.autoScroll;
+      
+      // Parse and add logs
+      const fragment = document.createDocumentFragment();
+      data.logs.forEach(line => {
+        const cleaned = cleanLog(line).trim();
+        if (!cleaned) return;
+        fragment.appendChild(self.createLogElement(cleaned));
+      });
+      
+      if (data.initial) {
+        self.el.appendChild(fragment);
+        self.el.scrollTop = self.el.scrollHeight;
+      } else {
+        self.el.insertBefore(fragment, self.el.firstChild);
+        self.el.scrollTop = self.el.scrollHeight - oldScrollHeight;
+      }
+      
+      self.loadedCount += data.logs.length;
+      self.isLoadingMore = false;
+      
+      // If we got fewer logs than expected, no more history
+      if (data.logs.length < 100) {
+        self.hasMoreHistory = false;
+      }
     });
-    
-    this.el.insertBefore(fragment, this.el.firstChild);
-    
-    // Maintain scroll position
-    this.el.scrollTop = this.el.scrollHeight - oldScrollHeight;
-    this.visibleCount += toLoad.length;
-    
-    setTimeout(() => { this.isLoadingMore = false; }, 100);
   },
 
-  createLogElement(log) {
+  loadMore() {
+    if (this.isLoadingMore || !this.hasMoreHistory) return;
+    this.isLoadingMore = true;
+    this.socket.emit('logs:more', { count: this.loadedCount + 200 });
+  },
+
+  createLogElement(text) {
     const div = document.createElement('div');
-    div.className = 'log-line ' + log.type;
+    div.className = 'log-line ' + getLogType(text);
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'log-time';
-    timeSpan.textContent = log.timestamp + ' ';
+    timeSpan.textContent = this.getTimestamp() + ' ';
 
     div.appendChild(timeSpan);
-    div.appendChild(document.createTextNode(log.text));
+    div.appendChild(document.createTextNode(text));
     return div;
   },
 
@@ -96,37 +115,31 @@ const ConsoleManager = {
       const trimmed = line.trim();
       if (!trimmed) return;
 
-      const log = {
-        timestamp,
-        text: trimmed,
-        type: type || getLogType(trimmed)
-      };
+      const div = document.createElement('div');
+      div.className = 'log-line ' + (type || getLogType(trimmed));
 
-      this.history.push(log);
-      
-      // Append to DOM if we're showing recent logs
-      this.el.appendChild(this.createLogElement(log));
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'log-time';
+      timeSpan.textContent = timestamp + ' ';
+
+      div.appendChild(timeSpan);
+      div.appendChild(document.createTextNode(trimmed));
+      this.el.appendChild(div);
     });
 
-    // Trim history if too large
-    while (this.history.length > this.maxHistory) {
-      this.history.shift();
-    }
-
-    // Trim visible DOM if too large (keep last 500 visible)
-    while (this.el.children.length > 500) {
+    // Trim visible DOM if too large
+    while (this.el.children.length > 1000) {
       this.el.removeChild(this.el.firstChild);
     }
 
-    // Auto-scroll to bottom if enabled
     if (this.autoScroll) {
       this.el.scrollTop = this.el.scrollHeight;
     }
   },
 
   clear() {
-    this.history = [];
-    this.visibleCount = 200;
     this.el.innerHTML = '';
+    this.loadedCount = 0;
+    this.hasMoreHistory = true;
   }
 };

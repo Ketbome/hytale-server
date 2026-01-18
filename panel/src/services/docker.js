@@ -115,6 +115,38 @@ async function getLogs(options = {}) {
   });
 }
 
+async function getLogsHistory(tail = 500) {
+  const c = await getContainer();
+  if (!c) throw new Error("Container not found");
+  
+  const stream = await c.logs({
+    follow: false,
+    stdout: true,
+    stderr: true,
+    tail,
+    timestamps: true
+  });
+
+  // Parse the buffer into lines
+  const lines = [];
+  let offset = 0;
+  
+  while (offset < stream.length) {
+    // Docker log format: 8 bytes header + payload
+    if (offset + 8 > stream.length) break;
+    
+    const size = stream.readUInt32BE(offset + 4);
+    if (offset + 8 + size > stream.length) break;
+    
+    const line = stream.slice(offset + 8, offset + 8 + size).toString('utf8').trim();
+    if (line) lines.push(line);
+    
+    offset += 8 + size;
+  }
+  
+  return lines;
+}
+
 async function getArchive(path) {
   const c = await getContainer();
   if (!c) throw new Error("Container not found");
@@ -136,6 +168,7 @@ module.exports = {
   stop,
   start,
   getLogs,
+  getLogsHistory,
   getArchive,
   putArchive
 };
