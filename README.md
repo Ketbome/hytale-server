@@ -88,6 +88,87 @@ TZ=America/New_York
 - 📁 File manager (upload, edit, delete)
 - 🌍 Multi-language (EN/ES/UK)
 - 📊 Server status & uptime
+- 🔧 Mod manager with Modtale integration
+
+## Development Mode
+
+For local development with hot-reload:
+
+```bash
+# Clone the repository
+git clone https://github.com/ketbome/hytale-server.git
+cd hytale-server
+
+# Start dev environment with Docker
+docker compose -f docker-compose.dev.yml up --build
+
+# Open panel: http://localhost:5173
+```
+
+### Development on Apple Silicon (ARM64)
+
+The `hytale-downloader` binary is x64 only. On ARM64 Macs, you have two options:
+
+**Option 1: Build with x64 emulation** (slower but downloader works):
+```bash
+DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose -f docker-compose.dev.yml build
+DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose -f docker-compose.dev.yml up
+```
+
+**Option 2: Download files manually** (faster, native ARM64):
+```bash
+# Download HytaleServer.jar and Assets.zip from hytale.com
+# Place them in ./server/ folder
+docker compose -f docker-compose.dev.yml up --build
+```
+
+The dev mode features:
+- **Hot Module Replacement (HMR)** for Svelte frontend
+- **Live reload** for backend changes
+- **Volume mounts** for instant code updates
+- **pnpm** for fast package management
+
+### Frontend Stack
+- **Svelte 5** with TypeScript
+- **Vite 6** for bundling
+- **Biome** for linting/formatting
+- **Knip** for dead code detection
+
+### Local Development (without Docker)
+
+```bash
+cd panel
+
+# Install dependencies
+cd backend && pnpm install && cd ..
+cd frontend && pnpm install && cd ..
+
+# Start dev servers
+pnpm dev
+```
+
+### Project Structure
+
+```
+panel/
+├── backend/           # Express + Socket.IO + TypeScript
+│   ├── src/
+│   │   ├── config/    # Configuration
+│   │   ├── middleware/# JWT auth middleware
+│   │   ├── routes/    # API routes
+│   │   ├── services/  # Docker, files, mods, modtale
+│   │   └── socket/    # Socket.IO handlers
+│   └── __tests__/     # Jest tests
+├── frontend/          # Svelte 5 + Vite + TypeScript
+│   └── src/
+│       └── lib/
+│           ├── components/  # UI components
+│           ├── stores/      # Svelte stores
+│           ├── services/    # API & Socket client
+│           └── i18n/        # Translations
+├── tsconfig.base.json # Shared TypeScript config
+└── biome.json         # Shared Biome config
+```
 
 ## Manual Download
 

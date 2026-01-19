@@ -7,35 +7,102 @@ on:
     branches: [main, develop]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        working-directory: panel
-        run: npm install
-
-      - name: Run tests
-        working-directory: panel
-        run: npm test -- --ci
-
-  build:
-    runs-on: ubuntu-latest
-    needs: test
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check syntax errors
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install root dependencies
         working-directory: panel
-        run: node --check src/server.js
+        run: pnpm install
+
+      - name: Install backend dependencies
+        working-directory: panel/backend
+        run: pnpm install
+
+      - name: Install frontend dependencies
+        working-directory: panel/frontend
+        run: pnpm install
+
+      - name: Run Biome lint (backend)
+        working-directory: panel/backend
+        run: pnpm lint
+
+      - name: Run Biome lint (frontend)
+        working-directory: panel/frontend
+        run: pnpm lint
+
+      - name: Run TypeScript check (backend)
+        working-directory: panel/backend
+        run: pnpm check
+
+      - name: Run TypeScript check (frontend)
+        working-directory: panel/frontend
+        run: pnpm check
+
+      - name: Run Knip (frontend)
+        working-directory: panel/frontend
+        run: pnpm knip
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install backend dependencies
+        working-directory: panel/backend
+        run: pnpm install
+
+      - name: Run tests
+        working-directory: panel/backend
+        run: pnpm test -- --ci
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install backend dependencies
+        working-directory: panel/backend
+        run: pnpm install
+
+      - name: Build backend
+        working-directory: panel/backend
+        run: pnpm build
 
       - name: Build Docker image (panel)
         run: docker build -t hytale-panel:test ./panel
@@ -49,7 +116,7 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master

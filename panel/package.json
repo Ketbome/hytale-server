@@ -2,26 +2,28 @@
   "name": "hytale-panel",
   "version": "1.0.0",
   "private": true,
-  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "start:legacy": "node server.js",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
-  },
-  "dependencies": {
-    "express": "^5.2.1",
-    "dockerode": "^4.0.2",
-    "socket.io": "^4.7.2",
-    "multer": "^2.0.2",
-    "tar-stream": "^3.1.7",
-    "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^3.0.3",
-    "cookie-parser": "^1.4.6"
+    "dev": "concurrently \"pnpm --dir backend dev\" \"pnpm --dir frontend dev\"",
+    "build": "pnpm --dir backend build && pnpm --dir frontend build",
+    "build:backend": "pnpm --dir backend build",
+    "build:frontend": "pnpm --dir frontend build",
+    "start": "pnpm --dir backend start",
+    "check": "pnpm --dir backend check && pnpm --dir frontend check",
+    "lint": "biome check ./frontend/src ./backend/src && eslint frontend/src backend/src",
+    "lint:fix": "biome check --write ./frontend/src ./backend/src && eslint --fix frontend/src backend/src",
+    "test": "pnpm --dir backend test",
+    "knip": "pnpm --dir frontend knip"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "supertest": "^6.3.4"
+    "@biomejs/biome": "^1.9.0",
+    "@eslint/js": "^9.39.2",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-svelte": "^3.14.0",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "globals": "^17.0.0",
+    "svelte": "^5.47.0",
+    "typescript-eslint": "^8.53.1"
   }
 }

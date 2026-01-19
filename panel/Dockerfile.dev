@@ -1,0 +1,30 @@
+# Development Dockerfile with hot reload
+FROM node:25-alpine
+
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Install root dependencies
+COPY package.json ./
+RUN pnpm install
+
+# Install backend dependencies
+COPY backend/package.json backend/pnpm-lock.yaml* ./backend/
+RUN cd backend && pnpm install
+
+# Install frontend dependencies
+COPY frontend/package.json frontend/pnpm-lock.yaml* ./frontend/
+RUN cd frontend && pnpm install
+
+# Copy shared config
+COPY tsconfig.base.json biome.json ./
+
+# Copy source (will be overridden by volume mount in dev)
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+
+EXPOSE 3000 5173
+
+# Start both backend and frontend dev servers
+CMD ["pnpm", "dev"]

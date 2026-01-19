@@ -7,7 +7,7 @@ Instructions for AI coding assistants working on this project.
 Docker-based Hytale dedicated server with web admin panel. Two main components:
 
 1. **Server Container**: Runs Hytale dedicated server (Java)
-2. **Panel Container**: Node.js web panel for management
+2. **Panel Container**: Node.js/TypeScript backend + Svelte 5 frontend
 
 ## Architecture
 
@@ -16,8 +16,8 @@ Docker-based Hytale dedicated server with web admin panel. Two main components:
 │                      Docker Host                             │
 │  ┌─────────────────┐      ┌─────────────────────────────┐  │
 │  │  hytale-server  │◄────►│       hytale-panel          │  │
-│  │   (Java/Game)   │      │   (Node.js/Express/Socket)  │  │
-│  │   Port: 5520    │      │      Port: 3000             │  │
+│  │   (Java/Game)   │      │   (Node.js + Svelte 5)      │  │
+│  │   Port: 5520    │      │   Ports: 3000, 5173         │  │
 │  └─────────────────┘      └─────────────────────────────┘  │
 │         ▲                            │                       │
 │         │ /opt/hytale (volume)       │ docker.sock           │
@@ -25,120 +25,168 @@ Docker-based Hytale dedicated server with web admin panel. Two main components:
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## Project Structure
+
+```
+hytale-server/
+├── Dockerfile              # Server container (Java)
+├── entrypoint.sh           # Server startup script
+├── docker-compose.yml      # Production
+├── docker-compose.dev.yml  # Development with hot-reload
+└── panel/
+    ├── Dockerfile          # Panel production
+    ├── Dockerfile.dev      # Panel development
+    ├── tsconfig.base.json  # Shared TS config
+    ├── biome.json          # Shared linter config
+    ├── backend/
+    │   ├── src/
+    │   │   ├── config/     # Environment config
+    │   │   ├── middleware/ # JWT auth
+    │   │   ├── routes/     # REST API
+    │   │   ├── services/   # Docker, files, mods, Modtale
+    │   │   ├── socket/     # Real-time handlers
+    │   │   └── server.ts   # Entry point
+    │   ├── __tests__/      # Jest tests (TypeScript)
+    │   ├── jest.config.ts
+    │   └── tsconfig.json
+    └── frontend/
+        ├── src/
+        │   ├── lib/
+        │   │   ├── components/  # Svelte 5 components
+        │   │   ├── stores/      # Svelte stores
+        │   │   ├── services/    # Socket client, API
+        │   │   ├── types/       # TypeScript interfaces
+        │   │   └── i18n/        # Locales (en, es, uk)
+        │   └── main.ts
+        ├── tsconfig.json
+        └── vite.config.ts
+```
+
 ## Key Files
 
-### Backend (panel/src/)
+### Backend (panel/backend/src/)
 
 | File | Purpose |
 |------|---------|
-| `server.js` | Express app entry, ~30 lines |
-| `config/index.js` | Centralized configuration |
-| `services/docker.js` | Docker API interactions |
-| `services/files.js` | File manager operations |
-| `services/downloader.js` | Hytale game downloader |
-| `middleware/auth.js` | JWT authentication |
-| `routes/auth.js` | Login/logout endpoints |
-| `routes/api.js` | Protected file API |
-| `socket/handlers.js` | WebSocket event handlers |
+| `server.ts` | Express app entry |
+| `config/index.ts` | Centralized configuration |
+| `services/docker.ts` | Docker API interactions |
+| `services/files.ts` | File manager operations |
+| `services/mods.ts` | Mod management |
+| `services/modtale.ts` | Modtale API client |
+| `middleware/auth.ts` | JWT authentication |
+| `socket/handlers.ts` | WebSocket events |
 
-### Frontend (panel/public/)
+### Frontend (panel/frontend/src/lib/)
 
-| File | Purpose |
+| Path | Purpose |
 |------|---------|
-| `index.html` | Single page, minimal HTML |
-| `css/styles.css` | All styles, Minecraft theme |
-| `js/app.js` | Main application logic |
-| `js/auth.js` | Login/session handling |
-| `js/fileManager.js` | File browser module |
-| `js/console.js` | Log console module |
-| `js/i18n.js` | Translations (EN/ES/UK) |
-| `js/utils.js` | Helper functions |
+| `components/` | Svelte 5 UI components |
+| `stores/` | Application state (auth, server, files, mods) |
+| `services/socketClient.ts` | Socket.IO wrapper |
+| `services/api.ts` | REST API calls |
+| `types/index.ts` | TypeScript interfaces |
+| `i18n/locales/` | Translations (JSON) |
+
+## Tech Stack
+
+### Backend
+- **Node.js 25** (Alpine)
+- **Express 5** + **Socket.IO 4**
+- **TypeScript 5.9** (strict mode)
+- **pnpm** package manager
+- **Jest** + **ts-jest** for testing
+- **Biome** for linting
+
+### Frontend
+- **Svelte 5** with runes
+- **Vite 6** bundler
+- **TypeScript** strict mode
+- **svelte-i18n** for translations
+- **Biome** + **Knip** for code quality
 
 ## Coding Patterns
 
-### Backend
+### Backend (TypeScript)
 
-```javascript
+```typescript
 // Services return consistent objects
-async function doSomething() {
+async function doSomething(): Promise<OperationResult> {
   try {
     // logic
     return { success: true, data };
   } catch (e) {
-    return { success: false, error: e.message };
+    return { success: false, error: (e as Error).message };
   }
 }
 
-// Socket handlers are simple
-socket.on('event', async (data) => {
-  const result = await service.doSomething(data);
-  socket.emit('event-result', result);
-});
+// ESM imports with .js extension
+import config from './config/index.js';
+import * as docker from './services/docker.js';
 ```
 
-### Frontend
+### Frontend (Svelte 5 Runes)
 
-```javascript
-// Modules are objects with init()
-const MyModule = {
-  init(socket) {
-    this.socket = socket;
-    this.bindEvents();
-  },
-  bindEvents() { /* ... */ }
-};
+```svelte
+<script lang="ts">
+  import { someStore } from '$lib/stores/example';
 
-// DOM helper
-const $ = id => document.getElementById(id);
+  // Props with $props()
+  let { title, onClick }: { title: string; onClick: () => void } = $props();
 
-// Translations
-t('keyName'); // Returns translated string
+  // Reactive state with $state()
+  let count = $state(0);
+
+  // Derived values with $derived()
+  let doubled = $derived(count * 2);
+
+  // Side effects with $effect()
+  $effect(() => {
+    console.log('Count changed:', count);
+  });
+</script>
+```
+
+### FORBIDDEN Svelte Patterns (deprecated)
+
+```svelte
+<!-- ❌ NEVER USE THESE -->
+<script>
+  export let prop;           // Use $props() instead
+  $: derived = value * 2;    // Use $derived() instead
+  $: { sideEffect(); }       // Use $effect() instead
+
+  import { onMount } from 'svelte';
+  onMount(() => {});         // Use $effect() instead
+
+  import { afterUpdate } from 'svelte';
+  afterUpdate(() => {});     // Use $effect() + tick() instead
+</script>
 ```
 
 ## Common Tasks
 
-### Adding a new API endpoint
-
-1. Add route in `panel/src/routes/api.js`
-2. Add service function in appropriate `services/*.js`
-3. Routes are already protected by `requireAuth` middleware
-
 ### Adding a new Socket event
 
-1. Add handler in `panel/src/socket/handlers.js`
-2. Add frontend listener in `panel/public/js/app.js`
-3. Sockets are already protected by `socketAuth` middleware
+1. Add handler in `panel/backend/src/socket/handlers.ts`
+2. Add TypeScript types if needed
+3. Add frontend listener in `panel/frontend/src/lib/services/socketClient.ts`
 
 ### Adding a translation
 
-1. Add key to all languages in `panel/public/js/i18n.js`
-2. Use `t('keyName')` in JS
+1. Add key to all JSON files in `panel/frontend/src/lib/i18n/locales/`
+2. Use `$_('keyName')` in Svelte components
 
-### Modifying Docker config
+### Adding a new store
 
-1. Update `.env.example` with new variables
-2. Update `docker-compose.yml` with `${VAR:-default}`
-3. Update `panel/src/config/index.js` if backend needs it
-
-### ARM64 Support
-
-- Auto-downloader is **x64 only** (skipped on ARM64)
-- Server (Java) runs natively on ARM64
-- Users must manually copy `HytaleServer.jar` and `Assets.zip`
-
-### Server Arguments
-
-Server args are configured in `entrypoint.sh`. Some options were removed because they're not supported by current Hytale server:
-- ❌ `--max-players` (not available)
-- ❌ `--view-distance` (not available)
-- ❌ `--name` (not available)
-
-Use `SERVER_EXTRA_ARGS` env var for custom server arguments (e.g. `--mods mods`).
+1. Create file in `panel/frontend/src/lib/stores/`
+2. Use `writable<Type>()` with TypeScript
+3. Export from `panel/frontend/src/lib/stores/index.ts`
 
 ## Don'ts
 
-- ❌ Don't use TypeScript (keep it simple)
-- ❌ Don't add React/Vue/frameworks (vanilla JS)
+- ❌ Don't use JavaScript files (TypeScript only)
+- ❌ Don't use deprecated Svelte patterns (`$:`, `export let`, lifecycle hooks)
 - ❌ Don't add unnecessary dependencies
 - ❌ Don't create README/docs unless asked
 - ❌ Don't refactor without reason
@@ -146,79 +194,76 @@ Use `SERVER_EXTRA_ARGS` env var for custom server arguments (e.g. `--mods mods`)
 
 ## Do's
 
+- ✅ Use TypeScript everywhere
+- ✅ Use Svelte 5 runes ($state, $derived, $effect, $props)
 - ✅ Keep functions small and focused
 - ✅ Return consistent response objects
 - ✅ Use existing patterns in the codebase
-- ✅ Preserve the Minecraft/retro UI style
-- ✅ Test changes with Docker
+- ✅ Preserve the retro UI style
 - ✅ Update translations when adding UI text
-
-## Environment
-
-- **Node.js**: 18+
-- **Docker**: Required for testing
-- **No build step**: Frontend is vanilla JS
-- **Entry point**: `panel/src/server.js`
+- ✅ Run `pnpm check` before committing
 
 ## Testing
 
-Tests use Jest + Supertest. Run from `panel/` directory:
-
 ```bash
-npm test              # Run all tests
-npm run test:watch    # Watch mode
-npm run test:coverage # With coverage report
+cd panel/backend
+pnpm test              # Run all tests
+pnpm test:watch        # Watch mode
+pnpm test:coverage     # With coverage
 ```
 
 ### Test Files
 
 | File | What it tests |
 |------|---------------|
-| `auth.test.js` | JWT generation, verification, middleware |
-| `docker.test.js` | Container status, exec, start/stop/restart |
-| `downloader.test.js` | Download flow, auth detection, errors |
-| `files.test.js` | Path security, file validation |
-| `routes.api.test.js` | Upload/download endpoints |
-| `routes.auth.test.js` | Login/logout/status |
-
-### Coverage Thresholds
-
-Global minimum: **80% statements, 70% branches**
-
-Excluded from coverage:
-- `server.js` - Entry point, no logic
-- `socket/handlers.js` - Requires full Socket.IO integration
-- `services/files.js` - Heavy Docker dependency
-
-### Writing Tests
-
-```javascript
-// Mock Docker before importing
-jest.mock('../src/services/docker', () => ({
-  execCommand: jest.fn(),
-  getStatus: jest.fn()
-}));
-
-const docker = require('../src/services/docker');
-
-test('example', async () => {
-  docker.execCommand.mockResolvedValue('output');
-  // test logic
-});
-```
+| `auth.test.ts` | JWT generation, verification, middleware |
+| `docker.test.ts` | Container status, exec, start/stop/restart |
+| `downloader.test.ts` | Download flow, auth detection |
+| `files.test.ts` | Path security, file validation |
+| `routes.api.test.ts` | Upload/download endpoints |
+| `routes.auth.test.ts` | Login/logout/status |
+| `config.test.ts` | Configuration validation |
 
 ## Quick Commands
 
 ```bash
-# Dev with hot reload (manual restart needed)
-cd panel && npm start
+# Development (with hot reload)
+docker compose -f docker-compose.dev.yml up --build
 
-# Run tests
-cd panel && npm test
+# Or locally:
+cd panel
+cd backend && pnpm install && cd ..
+cd frontend && pnpm install && cd ..
+pnpm dev
 
-# Full Docker test
-docker-compose -f docker-compose.dev.yml up --build
+# Type checking
+cd panel/backend && pnpm check
+cd panel/frontend && pnpm check
 
-# Check logs
-docker logs -f hytale-panel
+# Linting
+cd panel/backend && pnpm lint
+cd panel/frontend && pnpm lint && pnpm knip
+
+# Tests
+cd panel/backend && pnpm test
+
+# Build
+docker build -t hytale-panel ./panel
 ```
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `CONTAINER_NAME` | `hytale-server` | Target Docker container |
+| `PANEL_PORT` | `3000` | Panel HTTP port |
+| `PANEL_USER` | `admin` | Auth username |
+| `PANEL_PASS` | `admin` | Auth password |
+| `JWT_SECRET` | (random) | JWT signing key |
+| `MODTALE_API_KEY` | - | Modtale API key |
+
+## ARM64 Support
+
+- Auto-downloader is **x64 only** (skipped on ARM64)
+- Server (Java) runs natively on ARM64
+- Users must manually copy `HytaleServer.jar` and `Assets.zip`

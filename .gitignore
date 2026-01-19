@@ -25,3 +25,9 @@ package-lock.json
 Thumbs.db
 
 **/coverage/
+
+.env
+
+docker-compose.override.yml
+
+**/public-dist

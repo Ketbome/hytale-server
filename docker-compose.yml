@@ -2,7 +2,7 @@ services:
   hytale:
     image: ketbom/hytale-server:latest
     container_name: ${CONTAINER_NAME:-hytale-server}
-    restart: unless-stopped
+    restart: on-failure
     stdin_open: true
     tty: true
     privileged: true
@@ -19,8 +19,8 @@ services:
       SERVER_EXTRA_ARGS: ${SERVER_EXTRA_ARGS:-}
     volumes:
       - ./server:/opt/hytale
-      - /etc/machine-id:/etc/machine-id:ro
-      - /sys/class/dmi/id:/sys/class/dmi/id:ro
+#      - /etc/machine-id:/etc/machine-id:ro
+#      - /sys/class/dmi/id:/sys/class/dmi/id:ro
 
   panel:
     image: ketbom/hytale-panel:latest

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hytale Server Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body data-lang="en">
+  <script>
+    // Set data-lang early from localStorage
+    (function() {
+      var lang = localStorage.getItem('hytale-panel-lang');
+      if (lang) {
+        document.documentElement.setAttribute('data-lang', lang);
+        document.body.setAttribute('data-lang', lang);
+        var fontUi = lang === 'uk' ? "'8bit Operator', monospace" : "'VT323', monospace";
+        document.documentElement.style.setProperty('--font-ui', fontUi);
+      }
+    })();
+  </script>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

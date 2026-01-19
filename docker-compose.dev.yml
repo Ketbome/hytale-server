@@ -1,10 +1,10 @@
-# For development only - builds image locally
+# Development docker-compose with hot reload
 services:
   hytale:
     build: .
     image: hytale-server:dev
     container_name: ${CONTAINER_NAME:-hytale-server}
-    restart: unless-stopped
+    restart: on-failure
     stdin_open: true
     tty: true
     privileged: true
@@ -28,19 +28,25 @@ services:
       - ./data/config:/opt/hytale/config
 
   panel:
-    build: ./panel
-    container_name: hytale-panel
+    build:
+      context: ./panel
+      dockerfile: Dockerfile.dev
+    container_name: hytale-panel-dev
     restart: unless-stopped
     ports:
-      - "${PANEL_PORT:-3000}:${PANEL_PORT:-3000}"
+      - "${PANEL_PORT:-3000}:3000"
+      - "5173:5173"
     environment:
       CONTAINER_NAME: ${CONTAINER_NAME:-hytale-server}
-      PANEL_PORT: ${PANEL_PORT:-3000}
+      PANEL_PORT: 3000
       PANEL_USER: ${PANEL_USER:-admin}
       PANEL_PASS: ${PANEL_PASS:-admin}
       JWT_SECRET: ${JWT_SECRET:-}
       MODTALE_API_KEY: ${MODTALE_API_KEY:-}
     volumes:
+      - ./panel/backend/src:/app/backend/src
+      - ./panel/frontend/src:/app/frontend/src
+      - ./panel/tsconfig.base.json:/app/tsconfig.base.json
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - hytale
