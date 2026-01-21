@@ -36,3 +36,7 @@ export function updateServerStatus(id: string, status: 'running' | 'stopped' | '
 export function updateServer(id: string, updates: Partial<Server>): void {
   servers.update((list) => list.map((s) => (s.id === id ? { ...s, ...updates } : s)));
 }
+
+export function leaveServer(): void {
+  activeServerId.set(null);
+}

@@ -1,8 +1,10 @@
-import type { TabId, Toast, ToastType } from '$lib/types';
+import type { SectionId, TabId, Toast, ToastType } from '$lib/types';
 import { writable } from 'svelte/store';
 
 export const activeTab = writable<TabId>('control');
+export const activeSection = writable<SectionId>('console');
 export const sidebarHidden = writable<boolean>(false);
+export const sidebarCollapsed = writable<boolean>(false);
 export const panelExpanded = writable<boolean>(false);
 export const toasts = writable<Toast[]>([]);
 

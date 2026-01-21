@@ -2,13 +2,10 @@
   import { onMount, onDestroy } from 'svelte';
   import { isAuthenticated, checkStatus, isLoading } from '$lib/stores/auth';
   import { activeServerId } from '$lib/stores/servers';
-  import { sidebarHidden, panelExpanded } from '$lib/stores/ui';
   import { connectSocket, disconnectSocket } from '$lib/services/socketClient';
   import LoginScreen from '$lib/components/LoginScreen.svelte';
   import Dashboard from '$lib/components/Dashboard.svelte';
-  import Header from '$lib/components/Header.svelte';
-  import Console from '$lib/components/Console.svelte';
-  import Sidebar from '$lib/components/Sidebar.svelte';
+  import ServerView from '$lib/components/ServerView.svelte';
   import Toast from '$lib/components/ui/Toast.svelte';
 
   onMount(async () => {
@@ -31,24 +28,7 @@
     }
     prevAuth = authenticated;
   });
-
-  function showSidebar(): void {
-    sidebarHidden.set(false);
-  }
-
-  function handleKeydown(e: KeyboardEvent): void {
-    if (e.key === 'Escape') {
-      if ($panelExpanded) {
-        panelExpanded.set(false);
-      }
-      if ($sidebarHidden) {
-        sidebarHidden.set(false);
-      }
-    }
-  }
 </script>
-
-<svelte:window onkeydown={handleKeydown} />
 
 {#if $isLoading}
   <div class="loading-screen">
@@ -57,20 +37,9 @@
 {:else if !$isAuthenticated}
   <LoginScreen />
 {:else if !$activeServerId}
-  <!-- Dashboard view - no server selected -->
   <Dashboard />
 {:else}
-  <!-- Server view - managing a specific server -->
-  <div class="container" class:sidebar-hidden={$sidebarHidden} class:panel-expanded={$panelExpanded}>
-    <Header />
-    <div class="grid">
-      <div class="main">
-        <Console />
-        <button class="btn-show-sidebar" title="Show Panel" onclick={showSidebar}>☰</button>
-      </div>
-      <Sidebar />
-    </div>
-  </div>
+  <ServerView />
 {/if}
 
 <Toast />

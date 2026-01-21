@@ -206,6 +206,9 @@ export interface Toast {
 
 export type TabId = 'setup' | 'files' | 'mods' | 'commands' | 'control' | 'config';
 
+// Section IDs for the new sidebar navigation
+export type SectionId = 'console' | 'control' | 'files' | 'mods' | 'config' | 'setup';
+
 // Socket types
 export interface ActionStatus {
   action: string;

@@ -68,57 +68,68 @@
 </script>
 
 <div class="dashboard">
-  <div class="dashboard-header">
-    <div class="dashboard-logo">
-      <img src="/images/logo.png" alt="HytalePanel" class="logo-img" />
-      <div class="logo-text">
-        <h1>HYTALEPANEL</h1>
-        <span class="subtitle">{$_('serverPanel')}</span>
+  <header class="dashboard-header">
+    <div class="dashboard-brand">
+      <img src="/images/logo.png" alt="HytalePanel" class="brand-logo" />
+      <div class="brand-text">
+        <h1 class="brand-title">HYTALEPANEL</h1>
+        <span class="brand-subtitle">{$_('serverPanel')}</span>
       </div>
     </div>
-    <div class="header-links">
-      <a href="https://hytalepanel.ketbome.com/" target="_blank" class="docs-link" title={$_('documentation')}>
-        📚 {$_('docs')}
+    <nav class="dashboard-nav">
+      <a href="https://hytalepanel.ketbome.com/" target="_blank" class="nav-link" title={$_('documentation')}>
+        <span class="nav-link-icon">📚</span>
+        <span class="nav-link-text">{$_('docs')}</span>
       </a>
-      <a href="https://github.com/ketbome/hytalepanel/issues" target="_blank" class="docs-link" title={$_('reportIssue')}>
-        🐛 {$_('issues')}
+      <a href="https://github.com/ketbome/hytalepanel/issues" target="_blank" class="nav-link" title={$_('reportIssue')}>
+        <span class="nav-link-icon">🐛</span>
+        <span class="nav-link-text">{$_('issues')}</span>
       </a>
-    </div>
-  </div>
+    </nav>
+  </header>
 
-  <div class="dashboard-content">
+  <main class="dashboard-main">
     {#if $serversLoading}
-      <div class="dashboard-empty">
+      <div class="dashboard-loading">
         <div class="loading-spinner"></div>
-        <p>{$_('loading')}</p>
+        <p class="loading-text">{$_('loading')}</p>
       </div>
     {:else if $servers.length === 0}
-      <div class="dashboard-empty">
-        <img src="/images/hytale.png" alt="Hytale" class="empty-icon" />
-        <h2>{$_('noServers')}</h2>
-        <p>{$_('createServerHint')}</p>
-        <button class="mc-btn primary" onclick={() => showCreateModal = true}>
-          + {$_('createServer')}
+      <div class="dashboard-empty-state">
+        <div class="empty-icon-wrapper">
+          <img src="/images/hytale.png" alt="Hytale" class="empty-icon" />
+        </div>
+        <h2 class="empty-title">{$_('noServers')}</h2>
+        <p class="empty-description">{$_('createServerHint')}</p>
+        <button class="mc-btn primary create-btn" onclick={() => showCreateModal = true}>
+          <span class="btn-icon">+</span>
+          {$_('createServer')}
         </button>
       </div>
     {:else}
-      <div class="servers-grid">
-        {#each $servers as server (server.id)}
-          <ServerCard
-            {server}
-            onEnter={() => handleEnterServer(server)}
-            onStart={() => handleStartServer(server)}
-            onStop={() => handleStopServer(server)}
-            onDelete={() => handleDeleteServer(server)}
-          />
-        {/each}
+      <div class="servers-section">
+        <div class="servers-header">
+          <h2 class="servers-title">{$_('dashboard')}</h2>
+          <span class="servers-count">{$servers.length} server{$servers.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="servers-grid">
+          {#each $servers as server (server.id)}
+            <ServerCard
+              {server}
+              onEnter={() => handleEnterServer(server)}
+              onStart={() => handleStartServer(server)}
+              onStop={() => handleStopServer(server)}
+              onDelete={() => handleDeleteServer(server)}
+            />
+          {/each}
+        </div>
       </div>
       
-      <button class="create-fab" onclick={() => showCreateModal = true} title={$_('createServer')}>
-        +
+      <button class="fab-create" onclick={() => showCreateModal = true} title={$_('createServer')}>
+        <span class="fab-icon">+</span>
       </button>
     {/if}
-  </div>
+  </main>
 </div>
 
 {#if showCreateModal}
