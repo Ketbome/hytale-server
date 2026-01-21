@@ -1,6 +1,7 @@
 <script lang="ts">
   import { _ } from 'svelte-i18n';
   import { logs, autoScroll, clearLogs, hasMoreHistory, loadedCount, initialLoadDone, isLoadingMore, addLog } from '$lib/stores/console';
+  import { serverStatus } from '$lib/stores/server';
   import { emit } from '$lib/services/socketClient';
   import { tick } from 'svelte';
 
@@ -31,6 +32,7 @@
   }
 
   function sendCommand(): void {
+    if (!$serverStatus.running) return;
     const cmd = cmdInput.trim();
     if (!cmd) return;
 
@@ -75,11 +77,12 @@
   <div class="command-bar">
     <input
       type="text"
-      placeholder={$_('enterCommand')}
+      placeholder={$serverStatus.running ? $_('enterCommand') : $_('offline')}
       autocomplete="off"
       bind:value={cmdInput}
       onkeypress={handleKeypress}
+      disabled={!$serverStatus.running}
     />
-    <button onclick={sendCommand}>{$_('send')}</button>
+    <button onclick={sendCommand} disabled={!$serverStatus.running}>{$_('send')}</button>
   </div>
 </div>

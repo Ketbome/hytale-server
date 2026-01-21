@@ -230,12 +230,26 @@ export async function deleteServer(id: string, removeData = true): Promise<Opera
       return { success: false, error: 'Server not found' };
     }
 
-    const _server = data.servers[index];
-
-    // Stop and remove container
+    const server = data.servers[index];
     const serverDir = path.join(SERVERS_DIR, id);
+
+    // Stop container first if running
     try {
-      await execAsync('docker compose down --remove-orphans', { cwd: serverDir });
+      await execAsync(`docker stop ${server.containerName}`, { timeout: 30000 });
+    } catch {
+      // Container might not be running
+    }
+
+    // Remove container and volumes
+    try {
+      await execAsync('docker compose down -v --remove-orphans', { cwd: serverDir });
+    } catch {
+      // Compose might not exist
+    }
+
+    // Force remove container if still exists
+    try {
+      await execAsync(`docker rm -f ${server.containerName}`);
     } catch {
       // Container might not exist
     }

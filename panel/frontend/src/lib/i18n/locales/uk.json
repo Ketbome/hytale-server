@@ -149,5 +149,6 @@
   "serverDeleted": "Сервер видалено",
   "serverCreated": "Сервер створено",
   "enter": "Увiйти",
-  "delete": "Видалити"
+  "delete": "Видалити",
+  "serverOfflineFiles": "Запустiть сервер для керування файлами"
 }

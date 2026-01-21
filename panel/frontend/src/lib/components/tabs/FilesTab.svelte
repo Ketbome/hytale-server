@@ -1,6 +1,7 @@
 <script lang="ts">
   import { _ } from 'svelte-i18n';
   import { currentPath, fileList, editorState, openEditor, closeEditor, uploadState, FILE_ICONS, setEditorStatus } from '$lib/stores/files';
+  import { serverStatus } from '$lib/stores/server';
   import { emit } from '$lib/services/socketClient';
   import { uploadFile } from '$lib/services/api';
   import { showToast } from '$lib/stores/ui';
@@ -157,16 +158,22 @@
 
 </script>
 
+{#if !$serverStatus.running}
+  <div class="offline-notice">
+    <span>⚠</span> {$_('serverOfflineFiles')}
+  </div>
+{/if}
+
 <div class="file-breadcrumb">
   {#each breadcrumbParts as part}
-    <button type="button" class="breadcrumb-item" onclick={() => navigateTo(part.path)}>{part.label}</button>
+    <button type="button" class="breadcrumb-item" onclick={() => navigateTo(part.path)} disabled={!$serverStatus.running}>{part.label}</button>
   {/each}
 </div>
 
 <div class="file-toolbar">
-  <button class="mc-btn small" title={$_('refresh')} onclick={() => navigateTo($currentPath)}>↻</button>
-  <button class="mc-btn small" onclick={handleNewFolder}>{$_('newFolder')}</button>
-  <button class="mc-btn small" onclick={toggleUploadZone}>{$_('upload')}</button>
+  <button class="mc-btn small" title={$_('refresh')} onclick={() => navigateTo($currentPath)} disabled={!$serverStatus.running}>↻</button>
+  <button class="mc-btn small" onclick={handleNewFolder} disabled={!$serverStatus.running}>{$_('newFolder')}</button>
+  <button class="mc-btn small" onclick={toggleUploadZone} disabled={!$serverStatus.running}>{$_('upload')}</button>
 </div>
 
 {#if $uploadState.isVisible}

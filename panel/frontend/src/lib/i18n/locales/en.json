@@ -149,5 +149,6 @@
   "serverDeleted": "Server deleted",
   "serverCreated": "Server created",
   "enter": "Enter",
-  "delete": "Delete"
+  "delete": "Delete",
+  "serverOfflineFiles": "Start the server to manage files"
 }

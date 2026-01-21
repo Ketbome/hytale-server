@@ -149,5 +149,6 @@
   "serverDeleted": "Servidor eliminado",
   "serverCreated": "Servidor creado",
   "enter": "Entrar",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+  "serverOfflineFiles": "Inicia el servidor para gestionar archivos"
 }

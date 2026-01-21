@@ -958,6 +958,18 @@ header {
 }
 
 /* File Manager */
+.offline-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: rgba(255, 85, 85, 0.15);
+  border: 2px solid var(--error);
+  color: var(--error);
+  font-size: 13px;
+}
+
 .file-breadcrumb {
   display: flex;
   flex-wrap: wrap;
