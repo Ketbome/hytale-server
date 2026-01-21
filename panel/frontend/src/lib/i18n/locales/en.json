@@ -161,5 +161,7 @@
   "useG1GC": "Use G1GC garbage collector",
   "configSaved": "Configuration saved",
   "configHint": "Restart server to apply changes",
-  "stopServerToEdit": "Stop server to edit configuration"
+  "stopServerToEdit": "Stop server to edit configuration",
+  "docs": "Docs",
+  "documentation": "Documentation"
 }

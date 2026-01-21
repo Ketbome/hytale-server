@@ -1,6 +1,6 @@
 # Desarrollo
 
-Guía para contribuir al proyecto Hytale Server.
+Guía para contribuir al proyecto HytalePanel.
 
 ## Requisitos
 
@@ -12,7 +12,7 @@ Guía para contribuir al proyecto Hytale Server.
 ## Estructura del Proyecto
 
 ```
-hytale-server/
+hytalepanel/
 ├── Dockerfile              # Contenedor del servidor (Java)
 ├── entrypoint.sh           # Script de inicio
 ├── docker-compose.yml      # Producción
@@ -42,8 +42,8 @@ hytale-server/
 ### Con Docker (Recomendado)
 
 ```bash
-git clone https://github.com/ketbome/hytale-server.git
-cd hytale-server
+git clone https://github.com/ketbome/hytalepanel.git
+cd hytalepanel
 
 docker compose -f docker-compose.dev.yml up --build
 ```

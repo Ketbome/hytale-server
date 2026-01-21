@@ -1,8 +1,20 @@
-# Hytale Dedicated Server - Docker
+# HytalePanel
 
-Docker image for Hytale dedicated server with web panel, auto-download, and JWT authentication.
+Docker-based web panel for managing multiple Hytale dedicated servers with auto-download and JWT authentication.
 
 ![Panel Preview](docs/public/images/panel.png)
+
+## Features
+
+- 🖥️ **Multi-Server Management** - Create and manage multiple Hytale servers from a single panel
+- 📜 Real-time console logs with WebSocket
+- ⌨️ Send server commands
+- 🔐 JWT authentication
+- 📁 File manager (upload, edit, delete)
+- 🌍 Multi-language (EN/ES/UK)
+- 📊 Server status & uptime
+- 🔧 Mod manager with Modtale integration
+- ⚙️ Per-server configuration (RAM, ports, args)
 
 ## Quick Start
 
@@ -11,8 +23,8 @@ Docker image for Hytale dedicated server with web panel, auto-download, and JWT 
 mkdir hytale && cd hytale
 
 # 2. Download files
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/.env.example
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/.env.example
 
 # 3. Configure
 cp .env.example .env
@@ -25,28 +37,81 @@ docker compose up -d
 # http://localhost:3000
 ```
 
+## Multi-Server Architecture
+
+The panel now supports managing **multiple independent Hytale servers**. Each server has:
+
+- Its own Docker container
+- Separate data directory
+- Independent configuration (RAM, port, args)
+- Isolated mods folder
+
+```
+data/panel/
+├── servers.json          # Server registry
+└── servers/
+    ├── {server-id-1}/
+    │   ├── docker-compose.yml
+    │   └── server/       # Game files, mods, worlds
+    └── {server-id-2}/
+        ├── docker-compose.yml
+        └── server/
+```
+
+### Creating a Server
+
+1. Open the panel dashboard
+2. Click "Create Server"
+3. Configure name, port, and RAM
+4. Click "Create" - the server is ready to start
+
+### Server Configuration
+
+Each server can be configured individually from the **Config** tab:
+
+| Setting | Description |
+|---------|-------------|
+| Port | UDP port for the game (default: 5520, 5521, ...) |
+| Min RAM | Minimum Java heap (`-Xms`) |
+| Max RAM | Maximum Java heap (`-Xmx`) |
+| Bind Address | Network interface (default: 0.0.0.0) |
+| Extra Args | Additional server arguments |
+| Auto-download | Enable automatic game file download |
+| G1GC | Use G1 garbage collector (recommended) |
+| Linux Native | Mount machine-id volumes (Linux only) |
+
+Changes are saved to both `servers.json` and the server's `docker-compose.yml`.
+
 ## Data Persistence
 
 > ⚠️ **IMPORTANT: Your world data will be LOST if you don't use volume mounts!**
 
-The `docker-compose.yml` maps `./server` to `/opt/hytale` inside the container. This is where all your server data lives:
-- World files (`universe/`)
-- Server configuration
-- Mods and logs
+### Multi-Server Data
 
-**If you run the container without this volume mount, all data is stored inside the container and will be deleted when the container is removed.**
+All server data is stored in `./data/panel/`:
 
-```yaml
-# This line in docker-compose.yml saves your data:
-volumes:
-  - ./server:/opt/hytale  # ← Your data is saved in ./server/
+```
+data/panel/
+├── servers.json              # Server configurations
+└── servers/
+    └── {server-id}/
+        ├── docker-compose.yml
+        └── server/           # Game data
+            ├── universe/     # World files
+            ├── mods/         # Server mods
+            └── logs/         # Server logs
 ```
 
 ### Backup Recommendation
 
-Always backup your `./server` folder before updates or changes:
+Backup the entire data folder before updates:
 ```bash
-tar -czvf backup-$(date +%Y%m%d).tar.gz server/
+tar -czvf backup-$(date +%Y%m%d).tar.gz data/
+```
+
+Or backup a specific server:
+```bash
+tar -czvf server1-backup.tar.gz data/panel/servers/{server-id}/
 ```
 
 ## Authentication
@@ -104,15 +169,25 @@ TZ=America/New_York
 | 20-50 | 8G |
 | 50+ | 12G+ |
 
-## Web Panel Features
+## Web Panel
 
-- 📜 Real-time console logs
-- ⌨️ Send server commands
-- 🔐 JWT authentication
-- 📁 File manager (upload, edit, delete)
-- 🌍 Multi-language (EN/ES/UK)
-- 📊 Server status & uptime
-- 🔧 Mod manager with Modtale integration
+### Dashboard
+
+The main dashboard shows all your servers with:
+- Server name and status (Online/Offline)
+- Quick actions (Start, Stop, Enter, Delete)
+- Create new server button
+
+### Server Management Tabs
+
+| Tab | Description |
+|-----|-------------|
+| **Setup** | Download game files, authenticate with Hytale |
+| **Files** | Browse, upload, edit, delete server files |
+| **Mods** | Install mods from Modtale, manage local mods |
+| **Commands** | Quick command buttons and reference |
+| **Control** | Start, Stop, Restart, Wipe data |
+| **Config** | Server configuration (RAM, port, options) |
 
 ## Development Mode
 
@@ -120,8 +195,8 @@ For local development with hot-reload:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ketbome/hytale-server.git
-cd hytale-server
+git clone https://github.com/ketbome/hytalepanel.git
+cd hytalepanel
 
 # Start dev environment with Docker
 docker compose -f docker-compose.dev.yml up --build

@@ -10,19 +10,19 @@ head:
       content: hytale server, docker, dedicated server, game server, web panel, mods
 
 hero:
-  name: Hytale Server
+  name: HytalePanel
   text: Docker + Web Panel
   tagline: Run your Hytale dedicated server with auto-download, JWT auth, and a beautiful admin panel.
   image:
     src: /images/hytale.png
-    alt: Hytale Server Logo
+    alt: HytalePanel Logo
   actions:
     - theme: brand
       text: Get Started
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/ketbome/hytale-server
+      link: https://github.com/ketbome/hytalepanel
 
 features:
   - icon: 🐳
@@ -52,8 +52,8 @@ features:
 mkdir hytale && cd hytale
 
 # 2. Download files
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/.env.example
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/.env.example
 
 # 3. Configure
 cp .env.example .env

@@ -1,4 +1,4 @@
-# Docker Compose for ZimaOS / CasaOS
+# HytalePanel for ZimaOS / CasaOS
 # Servers are created dynamically from the Dashboard
 #
 # Usage: docker compose -f docker-compose.casaos.yml up -d

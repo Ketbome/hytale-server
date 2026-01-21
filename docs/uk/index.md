@@ -10,19 +10,19 @@ head:
       content: hytale сервер, docker, виділений сервер, веб-панель, моди
 
 hero:
-  name: Hytale Server
+  name: HytalePanel
   text: Docker + Веб-панель
   tagline: Запустіть свій виділений сервер Hytale з автозавантаженням, JWT автентифікацією та панеллю адміністрування.
   image:
     src: /images/hytale.png
-    alt: Hytale Server Logo
+    alt: HytalePanel Logo
   actions:
     - theme: brand
       text: Початок роботи
       link: /uk/guide/getting-started
     - theme: alt
       text: GitHub
-      link: https://github.com/ketbome/hytale-server
+      link: https://github.com/ketbome/hytalepanel
 
 features:
   - icon: 🐳
@@ -52,8 +52,8 @@ features:
 mkdir hytale && cd hytale
 
 # 2. Завантажити файли
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/.env.example
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/.env.example
 
 # 3. Налаштувати
 cp .env.example .env

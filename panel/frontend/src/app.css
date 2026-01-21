@@ -1488,6 +1488,25 @@ header {
   cursor: not-allowed;
 }
 
+/* Docs link in header */
+.docs-link {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 6px 10px;
+  background: var(--mc-dark);
+  border: 2px solid var(--mc-border-light);
+  color: var(--text-dim);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.docs-link:hover {
+  border-color: var(--hytale-orange);
+  color: var(--hytale-orange);
+}
+
 /* Logout button in header */
 .logout-btn {
   font-family: var(--font-ui);

@@ -1,11 +1,11 @@
-# Contributing to Hytale Server Docker
+# Contributing to HytalePanel
 
 ## Getting Started
 
 ```bash
 # Clone
-git clone https://github.com/ketbome/hytale-server.git
-cd hytale-server
+git clone https://github.com/ketbome/hytalepanel.git
+cd hytalepanel
 
 # Copy env
 cp .env.example .env

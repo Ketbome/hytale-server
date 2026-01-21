@@ -66,12 +66,15 @@
         <h1>{$activeServer.name}</h1>
         <div class="logo-subtitle">:{$activeServer.port}/UDP</div>
       {:else}
-        <h1>HYTALE</h1>
+        <h1>HYTALEPANEL</h1>
         <div class="logo-subtitle">{$_('serverPanel')}</div>
       {/if}
     </div>
   </div>
   <div class="header-right">
+    <a href="https://hytalepanel.ketbome.com/" target="_blank" class="docs-link" title={$_('documentation')}>
+      📚 {$_('docs')}
+    </a>
     <div class="lang-selector">
       <select class="lang-dropdown" value={$locale} onchange={handleLangChange}>
         <option value="en">English</option>

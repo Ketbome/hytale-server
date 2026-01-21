@@ -18,7 +18,7 @@
 
 ```bash
 # Завантажити compose сумісний з CasaOS
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.casaos.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.casaos.yml
 
 # Запустити з цим файлом
 docker compose -f docker-compose.casaos.yml up -d
@@ -182,6 +182,6 @@ sudo chown -R 1000:1000 ./server/
 
 Якщо вашої проблеми немає в списку:
 
-1. Перевірте [GitHub Issues](https://github.com/ketbome/hytale-server/issues)
+1. Перевірте [GitHub Issues](https://github.com/ketbome/hytalepanel/issues)
 2. Пошукайте існуючі issues перед створенням нового
 3. Включіть логи та вашу конфігурацію при повідомленні про баги

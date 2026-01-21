@@ -161,5 +161,7 @@
   "useG1GC": "Usar recolector de basura G1GC",
   "configSaved": "Configuración guardada",
   "configHint": "Reinicia el servidor para aplicar cambios",
-  "stopServerToEdit": "Detén el servidor para editar configuración"
+  "stopServerToEdit": "Detén el servidor para editar configuración",
+  "docs": "Docs",
+  "documentation": "Documentación"
 }

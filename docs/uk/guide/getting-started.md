@@ -3,108 +3,145 @@
 ## Вимоги
 
 - Docker та Docker Compose встановлені
-- 4GB+ RAM доступно
-- Порт 5520/UDP відкритий (гра) та 3000/TCP (панель)
+- 4ГБ+ RAM доступно на сервер
+- Порт 3000/TCP відкритий (панель)
+- Порт 5520+/UDP відкритий (ігрові сервери)
 
 ## Встановлення
 
-### 1. Створити папку проекту
+### 1. Створіть папку проекту
 
 ```bash
 mkdir hytale && cd hytale
 ```
 
-### 2. Завантажити файли конфігурації
+### 2. Завантажте файли конфігурації
 
 ```bash
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/.env.example
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/.env.example
 ```
 
-### 3. Налаштувати середовище
+### 3. Налаштуйте середовище
 
 ```bash
 cp .env.example .env
 ```
 
-Відредагуйте `.env` у вашому редакторі:
+Відредагуйте `.env`:
 
-```bash
-# Сервер
-JAVA_XMS=4G
-JAVA_XMX=8G
-BIND_PORT=5520
-
-# Автентифікація панелі (ЗМІНІТЬ!)
+```env
+# Авторизація панелі (ЗМІНІТЬ ЦЕ!)
 PANEL_USER=admin
 PANEL_PASS=ваш_безпечний_пароль
 JWT_SECRET=випадковий-рядок
 
 # Часовий пояс
-TZ=Europe/Kyiv
+TZ=Europe/Kiev
 ```
 
 ::: warning
 Завжди змінюйте `PANEL_USER` та `PANEL_PASS` перед розгортанням!
 :::
 
-### 4. Запустити сервер
+### 4. Запустіть панель
 
 ```bash
 docker compose up -d
 ```
 
-### 5. Доступ до панелі
+### 5. Відкрийте панель
 
 Відкрийте [http://localhost:3000](http://localhost:3000) у браузері.
 
-Облікові дані за замовчуванням:
+Стандартні облікові дані:
 - **Користувач**: `admin`
 - **Пароль**: `admin`
 
-## Загальні команди
+## Створення першого сервера
+
+1. Увійдіть у панель
+2. Натисніть **"Створити сервер"**
+3. Введіть назву (наприклад, "Мій Hytale Сервер")
+4. Налаштуйте RAM (рекомендовано: 4G мін, 8G макс)
+5. Натисніть **"Створити"**
+6. Натисніть **"Увійти"** для доступу до сервера
+7. Перейдіть на вкладку **Setup** та натисніть **"Завантажити файли"**
+8. Зачекайте завантаження (~2ГБ)
+9. Перейдіть на вкладку **Control** та натисніть **"СТАРТ"**
+
+Ваш сервер працює!
+
+## Налаштування кількох серверів
+
+Ви можете створити кілька серверів, кожен з:
+- Різними портами (5520, 5521, 5522, ...)
+- Різним розподілом RAM
+- Окремими налаштуваннями модів
+- Незалежними даними світу
+
+### Призначення портів
+
+Кожен сервер потребує унікальний UDP порт. Панель автоматично призначає порти починаючи з 5520.
+
+| Сервер | Порт |
+|--------|------|
+| Сервер 1 | 5520/UDP |
+| Сервер 2 | 5521/UDP |
+| Сервер 3 | 5522/UDP |
+
+Переконайтеся, що ці порти відкриті у вашому фаєрволі.
+
+## Типові команди
 
 ```bash
-# Переглянути логи
+# Переглянути логи панелі
 docker compose logs -f
 
-# Зупинити сервер
+# Зупинити панель
 docker compose down
 
 # Оновити до останньої версії
 docker compose pull && docker compose up -d
 
-# Резервне копіювання даних сервера
-docker compose stop
-tar -czvf backup.tar.gz server/
-docker compose start
+# Резервне копіювання всіх серверів
+tar -czvf backup-$(date +%Y%m%d).tar.gz data/
 ```
 
-## Налаштування брандмауера
+## Налаштування фаєрволу
 
 ### Linux (UFW)
 
 ```bash
-ufw allow 5520/udp
+# Панель
 ufw allow 3000/tcp
+
+# Ігрові сервери (налаштуйте діапазон за потреби)
+ufw allow 5520:5530/udp
 ```
 
 ### Windows
 
 ```powershell
-New-NetFirewallRule -DisplayName "Hytale Game" -Direction Inbound -Protocol UDP -LocalPort 5520 -Action Allow
+# Панель
 New-NetFirewallRule -DisplayName "Hytale Panel" -Direction Inbound -Protocol TCP -LocalPort 3000 -Action Allow
+
+# Ігрові сервери
+New-NetFirewallRule -DisplayName "Hytale Game" -Direction Inbound -Protocol UDP -LocalPort 5520-5530 -Action Allow
 ```
 
-## Порти
+## Підсумок портів
 
 | Сервіс | Порт | Протокол |
 |--------|------|----------|
-| Ігровий сервер | 5520 | UDP |
-| Веб-панель | 3000 | TCP |
+| Веб панель | 3000 | TCP |
+| Сервер 1 | 5520 | UDP |
+| Сервер 2 | 5521 | UDP |
+| ... | ... | UDP |
 
 ## Наступні кроки
 
-- [Налаштувати сервер](/uk/guide/configuration)
-- [Дізнатися про веб-панель](/uk/guide/panel)
-- [Встановити моди](/uk/guide/mods)
+- [Налаштування серверів](/uk/guide/configuration)
+- [Веб панель](/uk/guide/panel)
+- [Встановлення модів](/uk/guide/mods)
+- [Вирішення проблем](/uk/guide/troubleshooting)

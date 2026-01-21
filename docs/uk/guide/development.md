@@ -1,6 +1,6 @@
 # Розробка
 
-Посібник для контриб'юторів проекту Hytale Server.
+Посібник для контриб'юторів проекту HytalePanel.
 
 ## Вимоги
 
@@ -12,7 +12,7 @@
 ## Структура проекту
 
 ```
-hytale-server/
+hytalepanel/
 ├── Dockerfile              # Контейнер сервера (Java)
 ├── entrypoint.sh           # Скрипт запуску
 ├── docker-compose.yml      # Продакшн
@@ -42,8 +42,8 @@ hytale-server/
 ### З Docker (Рекомендовано)
 
 ```bash
-git clone https://github.com/ketbome/hytale-server.git
-cd hytale-server
+git clone https://github.com/ketbome/hytalepanel.git
+cd hytalepanel
 
 docker compose -f docker-compose.dev.yml up --build
 ```

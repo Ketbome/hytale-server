@@ -92,8 +92,8 @@ sudo usermod -aG docker $USER
 mkdir ~/hytale && cd ~/hytale
 
 # Завантажити compose файл
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/.env.example
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/.env.example
 cp .env.example .env
 
 # Налаштувати (зменшити RAM для Pi)

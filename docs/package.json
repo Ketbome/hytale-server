@@ -1,5 +1,5 @@
 {
-  "name": "hytale-server-docs",
+  "name": "hytalepanel-docs",
   "type": "module",
   "scripts": {
     "dev": "vitepress dev",

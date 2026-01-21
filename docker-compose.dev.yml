@@ -1,4 +1,4 @@
-# Development docker-compose with hot reload
+# HytalePanel Development - hot reload enabled
 # Servers are created dynamically from the Dashboard
 services:
   panel:

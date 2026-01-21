@@ -113,7 +113,7 @@ jobs:
           tag_name: v${{ steps.config.outputs.version }}
           name: v${{ steps.config.outputs.version }}
           body: |
-            ## Hytale Server v${{ steps.config.outputs.version }}
+            ## HytalePanel v${{ steps.config.outputs.version }}
 
             ### Quick Start
             ```bash

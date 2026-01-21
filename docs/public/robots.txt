@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Allow: /guide/
+Allow: /reference/
+Allow: /es/
+Allow: /uk/
 
-Sitemap: https://hytale.ketbome.com/sitemap.xml
+Disallow: /api/
+
+Sitemap: https://hytalepanel.ketbome.com/sitemap.xml

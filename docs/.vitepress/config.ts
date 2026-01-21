@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
-const siteUrl = 'https://hytale.ketbome.com'
-const title = 'Hytale Server'
+const siteUrl = 'https://hytalepanel.ketbome.com'
+const title = 'HytalePanel'
 const description = {
   en: 'Docker image for Hytale dedicated server with web admin panel, auto-download, JWT authentication, file manager, and mod support.',
   es: 'Imagen Docker para servidor dedicado de Hytale con panel web, descarga automática, autenticación JWT, gestor de archivos y soporte de mods.',
@@ -105,7 +105,7 @@ export default defineConfig({
           '/reference/': referenceSidebar('en')
         },
         editLink: {
-          pattern: 'https://github.com/ketbome/hytale-server/edit/main/docs/:path',
+          pattern: 'https://github.com/ketbome/hytalepanel/edit/main/docs/:path',
           text: 'Edit this page on GitHub'
         },
         lastUpdated: { text: 'Last updated' },
@@ -130,7 +130,7 @@ export default defineConfig({
           '/es/reference/': referenceSidebar('es')
         },
         editLink: {
-          pattern: 'https://github.com/ketbome/hytale-server/edit/main/docs/:path',
+          pattern: 'https://github.com/ketbome/hytalepanel/edit/main/docs/:path',
           text: 'Editar esta página en GitHub'
         },
         lastUpdated: { text: 'Última actualización' },
@@ -155,7 +155,7 @@ export default defineConfig({
           '/uk/reference/': referenceSidebar('uk')
         },
         editLink: {
-          pattern: 'https://github.com/ketbome/hytale-server/edit/main/docs/:path',
+          pattern: 'https://github.com/ketbome/hytalepanel/edit/main/docs/:path',
           text: 'Редагувати цю сторінку на GitHub'
         },
         lastUpdated: { text: 'Останнє оновлення' },
@@ -170,10 +170,10 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/images/hytale.png',
-    siteTitle: 'Hytale Server',
+    siteTitle: 'HytalePanel',
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/ketbome/hytale-server' }
+      { icon: 'github', link: 'https://github.com/ketbome/hytalepanel' }
     ],
 
     search: {

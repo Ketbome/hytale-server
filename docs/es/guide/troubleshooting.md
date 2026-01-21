@@ -18,7 +18,7 @@ Usa el archivo docker-compose alternativo que no requiere el mount de machine-id
 
 ```bash
 # Descargar el compose compatible con CasaOS
-curl -O https://raw.githubusercontent.com/ketbome/hytale-server/main/docker-compose.casaos.yml
+curl -O https://raw.githubusercontent.com/ketbome/hytalepanel/main/docker-compose.casaos.yml
 
 # Iniciar con este archivo
 docker compose -f docker-compose.casaos.yml up -d
@@ -182,6 +182,6 @@ Los mods instalados no aparecen en el juego.
 
 Si tu problema no está listado aquí:
 
-1. Revisa los [GitHub Issues](https://github.com/ketbome/hytale-server/issues)
+1. Revisa los [GitHub Issues](https://github.com/ketbome/hytalepanel/issues)
 2. Busca issues existentes antes de crear uno nuevo
 3. Incluye logs y tu configuración al reportar bugs

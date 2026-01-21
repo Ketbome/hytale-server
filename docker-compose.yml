@@ -1,4 +1,4 @@
-# Hytale Multi-Server Panel
+# HytalePanel - Multi-Server Management
 # Servers are created dynamically from the Dashboard
 services:
   panel:
