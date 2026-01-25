@@ -16,7 +16,7 @@
     "knip": "pnpm --dir frontend knip"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.0",
+    "@biomejs/biome": "^2.3.12",
     "@eslint/js": "^9.39.2",
     "concurrently": "^9.1.2",
     "eslint": "^9.39.2",
