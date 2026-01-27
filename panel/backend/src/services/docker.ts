@@ -128,6 +128,25 @@ export async function stop(containerName?: string): Promise<CommandResult> {
   }
 }
 
+export async function kill(containerName?: string): Promise<CommandResult> {
+  try {
+    const c = await getContainer(containerName);
+    if (!c) throw new Error('Container not found');
+    console.log(`[Docker] Force killing container ${containerName || config.container.name}...`);
+    await c.kill();
+    console.log('[Docker] Container killed');
+    return { success: true };
+  } catch (e) {
+    const error = (e as Error).message;
+    if (error.includes('not running') || error.includes('already stopped')) {
+      console.log('[Docker] Container already stopped');
+      return { success: true };
+    }
+    console.error('[Docker] Kill failed:', error);
+    return { success: false, error };
+  }
+}
+
 export async function start(containerName?: string): Promise<CommandResult> {
   try {
     const c = await getContainer(containerName);

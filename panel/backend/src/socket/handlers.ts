@@ -197,6 +197,15 @@ export function setupSocketHandlers(io: Server): void {
       socket.emit('action-status', { action: 'stop', ...result });
     });
 
+    socket.on('kill', async () => {
+      if (!ctx.containerName) return;
+      console.log('[Socket] Kill (force stop) requested');
+      socket.emit('action-status', { action: 'kill', status: 'starting' });
+      const result = await docker.kill(ctx.containerName);
+      console.log('[Socket] Kill result:', result);
+      socket.emit('action-status', { action: 'kill', ...result });
+    });
+
     socket.on('start', async () => {
       if (!ctx.serverId) return;
       console.log('[Socket] Start requested');

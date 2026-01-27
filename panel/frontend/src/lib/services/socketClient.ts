@@ -163,7 +163,8 @@ export function connectSocket(): Socket {
         restart: t('restarted'),
         stop: t('stopped'),
         start: t('started'),
-        wipe: t('dataWiped')
+        wipe: t('dataWiped'),
+        kill: t('killed')
       };
       showToast(msgs[s.action] || t('done'));
     } else if (s.error) {

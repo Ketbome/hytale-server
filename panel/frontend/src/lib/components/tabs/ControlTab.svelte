@@ -24,6 +24,13 @@
     }
   }
 
+  function handleForceStop(): void {
+    if (!$serverStatus.running) return;
+    if (confirm($_('confirmForceStop'))) {
+      emit('kill');
+    }
+  }
+
   function handleWipe(): void {
     if ($serverStatus.running) return;
     if (confirm($_('confirmWipe'))) {
@@ -39,6 +46,7 @@
   <button class="mc-btn small" onclick={handleRestart} disabled={!$serverStatus.running}>{$_('restart')}</button>
 </div>
 <button class="mc-btn danger small" onclick={handleStop} disabled={!$serverStatus.running}>{$_('stopServer')}</button>
+<button class="mc-btn danger small" style="margin-top: 4px; opacity: 0.8;" onclick={handleForceStop} disabled={!$serverStatus.running} title={$_('forceStopTooltip')}>{$_('forceStop')}</button>
 <button class="mc-btn warning small" style="margin-top: 8px;" onclick={handleWipe} disabled={$serverStatus.running}>{$_('wipeData')}</button>
 
 <div class="info-compact">
