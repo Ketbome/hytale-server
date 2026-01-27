@@ -1,4 +1,4 @@
-import { writable, get } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 export interface PanelConfig {
   basePath: string;
@@ -18,7 +18,7 @@ export async function loadPanelConfig(): Promise<void> {
     // In prod, try current path first (for BASE_PATH), then root
     const currentBase = window.location.pathname.replace(/\/$/, '');
     const paths = currentBase ? [`${currentBase}/panel-config`, '/panel-config'] : ['/panel-config'];
-    
+
     for (const path of paths) {
       try {
         const res = await fetch(path);
@@ -35,7 +35,7 @@ export async function loadPanelConfig(): Promise<void> {
         // Try next path
       }
     }
-    
+
     // Default config if fetch fails
     panelConfig.set({ basePath: '', authDisabled: false, loaded: true });
   } catch {

@@ -1,5 +1,5 @@
-import type { Server, ServerConfig } from '$lib/stores/servers';
 import { apiUrl } from '$lib/stores/config';
+import type { Server, ServerConfig } from '$lib/stores/servers';
 
 export interface UploadResponse {
   success: boolean;
