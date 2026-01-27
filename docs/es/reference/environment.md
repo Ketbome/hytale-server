@@ -23,6 +23,7 @@ Referencia completa de todas las variables de entorno.
 | `JWT_SECRET` | (aleatorio) | Clave secreta para firmar JWT |
 | `MODTALE_API_KEY` | - | API key para integración Modtale |
 | `HOST_DATA_PATH` | - | Ruta del host para acceso directo |
+| `DISABLE_AUTH` | `false` | Deshabilitar autenticación del panel |
 
 ## Variables de Docker
 
@@ -130,6 +131,20 @@ Cuando está configurado:
 ::: tip Acceso Directo a Archivos
 Útil cuando quieres editar archivos del servidor, subir mods o gestionar mundos directamente desde el sistema de archivos del host en lugar del panel web.
 :::
+
+### DISABLE_AUTH
+
+Deshabilita completamente la autenticación del panel. Usa esto cuando la autenticación es manejada por un reverse proxy con SSO (Authentik, Authelia, etc.).
+
+```bash
+DISABLE_AUTH=true
+```
+
+::: warning Seguridad
+Solo habilita esto detrás de un reverse proxy correctamente configurado con autenticación. El panel será totalmente accesible sin login.
+:::
+
+El panel también soporta headers **HTTP Basic Auth**. Si tu SSO/reverse proxy inyecta headers `Authorization: Basic ...` con credenciales válidas, el panel los aceptará sin requerir login separado.
 
 ## Ejemplo de Archivo .env
 

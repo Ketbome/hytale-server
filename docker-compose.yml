@@ -4,6 +4,9 @@
 # To access server data directly from host, set HOST_DATA_PATH:
 #   HOST_DATA_PATH=/path/to/data docker compose up -d
 # This makes servers use bind mounts instead of Docker volumes.
+#
+# For SSO: set DISABLE_AUTH=true if using reverse proxy auth (Authentik, etc.)
+# The panel also accepts Basic Auth headers from your proxy.
 services:
   panel:
     image: ketbom/hytale-panel:latest
@@ -20,6 +23,7 @@ services:
       MODTALE_API_KEY: ${MODTALE_API_KEY:-}
       DATA_PATH: /opt/hytale-panel/data
       HOST_DATA_PATH: ${HOST_DATA_PATH:-}
+      DISABLE_AUTH: ${DISABLE_AUTH:-false}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${HOST_DATA_PATH:-hytale-panel-data}:/opt/hytale-panel/data

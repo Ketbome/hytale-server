@@ -173,6 +173,7 @@ TZ=America/New_York
 | `PANEL_PASS` | `admin` | Panel password |
 | `PANEL_PORT` | `3000` | Panel HTTP port |
 | `HOST_DATA_PATH` | - | Host path for direct file access |
+| `DISABLE_AUTH` | `false` | Disable auth (for SSO) |
 
 ### RAM Guide
 

@@ -4,6 +4,7 @@ import { writable } from 'svelte/store';
 export const isAuthenticated = writable<boolean>(false);
 export const authError = writable<string | null>(null);
 export const isUsingDefaults = writable<boolean>(false);
+export const authDisabled = writable<boolean>(false);
 export const isLoading = writable<boolean>(true);
 
 export async function checkStatus(): Promise<boolean> {
@@ -12,6 +13,7 @@ export async function checkStatus(): Promise<boolean> {
     if (res.ok) {
       const data: AuthStatus = await res.json();
       isAuthenticated.set(data.authenticated);
+      if (data.authDisabled) authDisabled.set(true);
       return data.authenticated;
     }
     isAuthenticated.set(false);
@@ -27,6 +29,7 @@ export async function checkDefaults(): Promise<void> {
     const res = await fetch('/auth/check-defaults');
     const data: DefaultsCheck = await res.json();
     isUsingDefaults.set(data.usingDefaults);
+    authDisabled.set(data.authDisabled);
   } catch {
     // ignore
   }

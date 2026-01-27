@@ -23,6 +23,7 @@ Complete reference of all environment variables.
 | `JWT_SECRET` | (random) | Secret key for JWT signing |
 | `MODTALE_API_KEY` | - | API key for Modtale integration |
 | `HOST_DATA_PATH` | - | Host path for direct file access |
+| `DISABLE_AUTH` | `false` | Disable panel authentication |
 
 ## Docker Variables
 
@@ -130,6 +131,20 @@ When configured:
 ::: tip Direct File Access
 This is useful when you want to edit server files, upload mods, or manage worlds directly from your host filesystem instead of through the web panel.
 :::
+
+### DISABLE_AUTH
+
+Completely disables panel authentication. Use this when authentication is handled by a reverse proxy with SSO (Authentik, Authelia, etc.).
+
+```env
+DISABLE_AUTH=true
+```
+
+::: warning Security
+Only enable this behind a properly configured reverse proxy with authentication. The panel will be fully accessible without login.
+:::
+
+The panel also supports **HTTP Basic Auth** headers. If your SSO/reverse proxy injects `Authorization: Basic ...` headers with valid credentials, the panel will accept them without requiring a separate login.
 
 ## Example .env File
 

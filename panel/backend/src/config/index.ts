@@ -17,6 +17,7 @@ export interface Config {
     password: string;
     jwtSecret: string;
     tokenExpiry: string;
+    disabled: boolean; // Disable auth entirely (for SSO at reverse proxy level)
   };
   files: {
     basePath: string;
@@ -52,7 +53,8 @@ const config: Config = {
     username: process.env.PANEL_USER || 'admin',
     password: process.env.PANEL_PASS || 'admin',
     jwtSecret: process.env.JWT_SECRET || defaultSecret,
-    tokenExpiry: '24h'
+    tokenExpiry: '24h',
+    disabled: process.env.DISABLE_AUTH === 'true'
   },
   files: {
     basePath: '/opt/hytale',
