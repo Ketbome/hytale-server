@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import config from '../config/index.js';
 
 const execAsync = promisify(exec);
 
@@ -43,7 +44,7 @@ export interface ServersListResult extends OperationResult {
   servers: Server[];
 }
 
-const DATA_PATH = process.env.DATA_PATH || '/opt/hytale-panel/data';
+const DATA_PATH = config.data.path;
 const SERVERS_FILE = path.join(DATA_PATH, 'servers.json');
 const SERVERS_DIR = path.join(DATA_PATH, 'servers');
 
@@ -84,6 +85,12 @@ function generateDockerCompose(server: Server): string {
 `
     : '';
 
+  // Use host path if available, otherwise relative path
+  const hostDataPath = config.data.hostPath;
+  const serverVolume = hostDataPath
+    ? `${hostDataPath}/servers/${server.id}/server:/opt/hytale`
+    : './server:/opt/hytale';
+
   return `services:
   ${server.containerName}:
     image: ketbom/hytale-server:latest
@@ -104,7 +111,7 @@ function generateDockerCompose(server: Server): string {
       USE_G1GC: ${server.config.useG1gc}
       SERVER_EXTRA_ARGS: "${server.config.extraArgs}"
     volumes:
-      - ./server:/opt/hytale
+      - ${serverVolume}
 ${machineIdVolumes}`;
 }
 

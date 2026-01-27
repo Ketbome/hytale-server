@@ -8,6 +8,7 @@ export interface Config {
   };
   server: {
     port: number;
+    basePath: string; // Base URL path (e.g., '/panel' for domain.com/panel/)
   };
   docker: {
     socketPath: string;
@@ -17,6 +18,7 @@ export interface Config {
     password: string;
     jwtSecret: string;
     tokenExpiry: string;
+    disabled: boolean; // Disable auth entirely (for SSO at reverse proxy level)
   };
   files: {
     basePath: string;
@@ -34,6 +36,7 @@ export interface Config {
   };
   data: {
     path: string;
+    hostPath: string | null; // Host path for bind mounts (servers inherit this)
   };
 }
 
@@ -42,7 +45,8 @@ const config: Config = {
     name: process.env.CONTAINER_NAME || 'hytale-server'
   },
   server: {
-    port: Number.parseInt(process.env.PANEL_PORT || '3000', 10)
+    port: Number.parseInt(process.env.PANEL_PORT || '3000', 10),
+    basePath: (process.env.BASE_PATH || '').replace(/\/+$/, '') // Remove trailing slashes
   },
   docker: {
     socketPath: '/var/run/docker.sock'
@@ -51,7 +55,8 @@ const config: Config = {
     username: process.env.PANEL_USER || 'admin',
     password: process.env.PANEL_PASS || 'admin',
     jwtSecret: process.env.JWT_SECRET || defaultSecret,
-    tokenExpiry: '24h'
+    tokenExpiry: '24h',
+    disabled: process.env.DISABLE_AUTH === 'true'
   },
   files: {
     basePath: '/opt/hytale',
@@ -123,7 +128,8 @@ const config: Config = {
     apiKey: process.env.MODTALE_API_KEY || null
   },
   data: {
-    path: process.env.DATA_PATH || '/opt/hytale-panel/data'
+    path: process.env.DATA_PATH || '/opt/hytale-panel/data',
+    hostPath: process.env.HOST_DATA_PATH || null
   }
 };
 

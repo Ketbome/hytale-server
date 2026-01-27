@@ -1,4 +1,5 @@
 import { isAuthenticated } from '$lib/stores/auth';
+import { panelConfig } from '$lib/stores/config';
 import {
   addLog,
   clearLogs,
@@ -65,7 +66,10 @@ export function connectSocket(): Socket {
     socketInstance.disconnect();
   }
 
-  socketInstance = io();
+  // Configure socket path based on BASE_PATH
+  const config = get(panelConfig);
+  const socketPath = config.basePath ? `${config.basePath}/socket.io` : '/socket.io';
+  socketInstance = io({ path: socketPath });
 
   socketInstance.on('connect', () => {
     isConnected.set(true);
@@ -159,7 +163,8 @@ export function connectSocket(): Socket {
         restart: t('restarted'),
         stop: t('stopped'),
         start: t('started'),
-        wipe: t('dataWiped')
+        wipe: t('dataWiped'),
+        kill: t('killed')
       };
       showToast(msgs[s.action] || t('done'));
     } else if (s.error) {

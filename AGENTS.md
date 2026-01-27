@@ -261,6 +261,9 @@ docker build -t hytale-panel ./panel
 | `PANEL_PASS` | `admin` | Auth password |
 | `JWT_SECRET` | (random) | JWT signing key |
 | `MODTALE_API_KEY` | - | Modtale API key |
+| `HOST_DATA_PATH` | - | Host path for data (enables direct file access) |
+| `DISABLE_AUTH` | `false` | Disable panel auth (for SSO at proxy level) |
+| `BASE_PATH` | - | URL path prefix (e.g., `/panel` for domain.com/panel/) |
 
 ## ARM64 Support
 

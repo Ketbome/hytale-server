@@ -188,7 +188,7 @@ router.post('/servers/:id/compose/regenerate', async (req, res) => {
 
 router.post('/files/upload', upload.single('file'), async (req, res) => {
   try {
-    const { targetDir, containerName } = req.body as { targetDir?: string, containerName: string };
+    const { targetDir, containerName } = req.body as { targetDir?: string; containerName: string };
     const file = req.file;
 
     if (!containerName) {

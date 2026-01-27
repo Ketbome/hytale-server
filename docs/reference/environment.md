@@ -22,6 +22,9 @@ Complete reference of all environment variables.
 | `PANEL_PORT` | `3000` | HTTP server port |
 | `JWT_SECRET` | (random) | Secret key for JWT signing |
 | `MODTALE_API_KEY` | - | API key for Modtale integration |
+| `HOST_DATA_PATH` | - | Host path for direct file access |
+| `DISABLE_AUTH` | `false` | Disable panel authentication |
+| `BASE_PATH` | - | URL path prefix (e.g., `/panel`) |
 
 ## Docker Variables
 
@@ -113,6 +116,54 @@ When configured, enables:
 - One-click mod installation
 - Update checking
 
+### HOST_DATA_PATH
+
+Path on the host filesystem where panel data should be stored. When set, servers use absolute bind mounts instead of Docker volumes.
+
+```env
+HOST_DATA_PATH=/home/user/hytale-data
+```
+
+When configured:
+- Panel data stored at the host path
+- New servers use absolute paths: `/home/user/hytale-data/servers/{id}/server:/opt/hytale`
+- Files accessible directly from host without using the panel
+
+::: tip Direct File Access
+This is useful when you want to edit server files, upload mods, or manage worlds directly from your host filesystem instead of through the web panel.
+:::
+
+### DISABLE_AUTH
+
+Completely disables panel authentication. Use this when authentication is handled by a reverse proxy with SSO (Authentik, Authelia, etc.).
+
+```env
+DISABLE_AUTH=true
+```
+
+::: warning Security
+Only enable this behind a properly configured reverse proxy with authentication. The panel will be fully accessible without login.
+:::
+
+The panel also supports **HTTP Basic Auth** headers. If your SSO/reverse proxy injects `Authorization: Basic ...` headers with valid credentials, the panel will accept them without requiring a separate login.
+
+### BASE_PATH
+
+URL path prefix to mount the panel at a custom location. Useful when running multiple services on the same domain.
+
+```env
+BASE_PATH=/panel
+```
+
+When configured:
+- Panel accessible at `https://domain.com/panel/` instead of root
+- All API routes prefixed: `/panel/api/`, `/panel/auth/`
+- Socket.IO path: `/panel/socket.io`
+
+::: tip Reverse Proxy
+Configure your reverse proxy (Nginx, Caddy, Traefik) to forward requests from `/panel/` to the panel container.
+:::
+
 ## Example .env File
 
 ```env
@@ -138,4 +189,10 @@ JWT_SECRET=change-this-to-a-random-string
 # Optional Integrations
 # ===================
 MODTALE_API_KEY=your-api-key
+
+# ===================
+# Data Storage
+# ===================
+# Uncomment to store data on host instead of Docker volume
+# HOST_DATA_PATH=/home/user/hytale-data
 ```

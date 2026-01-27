@@ -1,6 +1,7 @@
 // Auth types
 export interface AuthStatus {
   authenticated: boolean;
+  authDisabled?: boolean;
 }
 
 export interface LoginResponse {
@@ -10,6 +11,7 @@ export interface LoginResponse {
 
 export interface DefaultsCheck {
   usingDefaults: boolean;
+  authDisabled: boolean;
 }
 
 // Server types

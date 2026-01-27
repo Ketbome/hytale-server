@@ -22,6 +22,9 @@ Referencia completa de todas las variables de entorno.
 | `PANEL_PORT` | `3000` | Puerto HTTP del servidor |
 | `JWT_SECRET` | (aleatorio) | Clave secreta para firmar JWT |
 | `MODTALE_API_KEY` | - | API key para integración Modtale |
+| `HOST_DATA_PATH` | - | Ruta del host para acceso directo |
+| `DISABLE_AUTH` | `false` | Deshabilitar autenticación del panel |
+| `BASE_PATH` | - | Prefijo de ruta URL (ej: `/panel`) |
 
 ## Variables de Docker
 
@@ -113,6 +116,54 @@ Cuando está configurado, habilita:
 - Instalación de mods con un click
 - Verificación de actualizaciones
 
+### HOST_DATA_PATH
+
+Ruta en el sistema de archivos del host donde se almacenarán los datos del panel. Cuando está configurado, los servidores usan bind mounts absolutos en lugar de volúmenes Docker.
+
+```bash
+HOST_DATA_PATH=/home/user/hytale-data
+```
+
+Cuando está configurado:
+- Los datos del panel se almacenan en la ruta del host
+- Los nuevos servidores usan rutas absolutas: `/home/user/hytale-data/servers/{id}/server:/opt/hytale`
+- Los archivos son accesibles directamente desde el host sin usar el panel
+
+::: tip Acceso Directo a Archivos
+Útil cuando quieres editar archivos del servidor, subir mods o gestionar mundos directamente desde el sistema de archivos del host en lugar del panel web.
+:::
+
+### DISABLE_AUTH
+
+Deshabilita completamente la autenticación del panel. Usa esto cuando la autenticación es manejada por un reverse proxy con SSO (Authentik, Authelia, etc.).
+
+```bash
+DISABLE_AUTH=true
+```
+
+::: warning Seguridad
+Solo habilita esto detrás de un reverse proxy correctamente configurado con autenticación. El panel será totalmente accesible sin login.
+:::
+
+El panel también soporta headers **HTTP Basic Auth**. Si tu SSO/reverse proxy inyecta headers `Authorization: Basic ...` con credenciales válidas, el panel los aceptará sin requerir login separado.
+
+### BASE_PATH
+
+Prefijo de ruta URL para montar el panel en una ubicación personalizada. Útil cuando ejecutas múltiples servicios en el mismo dominio.
+
+```bash
+BASE_PATH=/panel
+```
+
+Cuando está configurado:
+- Panel accesible en `https://dominio.com/panel/` en lugar de la raíz
+- Todas las rutas API con prefijo: `/panel/api/`, `/panel/auth/`
+- Path de Socket.IO: `/panel/socket.io`
+
+::: tip Reverse Proxy
+Configura tu reverse proxy (Nginx, Caddy, Traefik) para reenviar peticiones de `/panel/` al contenedor del panel.
+:::
+
 ## Ejemplo de Archivo .env
 
 ```bash
@@ -138,4 +189,10 @@ JWT_SECRET=cambia-esto-a-una-cadena-aleatoria
 # Integraciones Opcionales
 # ===================
 MODTALE_API_KEY=tu-api-key
+
+# ===================
+# Almacenamiento de Datos
+# ===================
+# Descomentar para almacenar datos en el host en lugar de volumen Docker
+# HOST_DATA_PATH=/home/user/hytale-data
 ```

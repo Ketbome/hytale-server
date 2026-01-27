@@ -62,14 +62,18 @@ router.post('/logout', (_req, res) => {
 router.get('/status', requireAuth, (req: AuthenticatedRequest, res: Response) => {
   res.json({
     authenticated: true,
-    username: req.user?.username
+    username: req.user?.username,
+    authDisabled: config.auth.disabled
   });
 });
 
 router.get('/check-defaults', (_req, res) => {
   const usingDefaults = config.auth.username === 'admin' && config.auth.password === 'admin';
 
-  res.json({ usingDefaults });
+  res.json({
+    usingDefaults,
+    authDisabled: config.auth.disabled
+  });
 });
 
 export default router;

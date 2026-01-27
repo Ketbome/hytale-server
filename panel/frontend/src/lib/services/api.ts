@@ -1,3 +1,4 @@
+import { apiUrl } from '$lib/stores/config';
 import type { Server, ServerConfig } from '$lib/stores/servers';
 
 export interface UploadResponse {
@@ -33,7 +34,7 @@ export async function uploadFile(
   formData.append('targetDir', targetDir);
   formData.append('containerName', containerName);
 
-  const response = await fetch('/api/files/upload', {
+  const response = await fetch(apiUrl('/api/files/upload'), {
     method: 'POST',
     body: formData
   });
@@ -45,7 +46,7 @@ export async function uploadFile(
 
 export async function fetchServers(): Promise<ServersResponse> {
   try {
-    const response = await fetch('/api/servers');
+    const response = await fetch(apiUrl('/api/servers'));
     return await response.json();
   } catch (e) {
     return { success: false, error: (e as Error).message };
@@ -60,7 +61,7 @@ export interface CreateServerParams {
 
 export async function createServer(params: CreateServerParams): Promise<ServerResponse> {
   try {
-    const response = await fetch('/api/servers', {
+    const response = await fetch(apiUrl('/api/servers'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params)
@@ -73,7 +74,7 @@ export async function createServer(params: CreateServerParams): Promise<ServerRe
 
 export async function updateServer(id: string, params: Partial<CreateServerParams>): Promise<ServerResponse> {
   try {
-    const response = await fetch(`/api/servers/${id}`, {
+    const response = await fetch(apiUrl(`/api/servers/${id}`), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params)
@@ -86,7 +87,7 @@ export async function updateServer(id: string, params: Partial<CreateServerParam
 
 export async function deleteServer(id: string): Promise<OperationResponse> {
   try {
-    const response = await fetch(`/api/servers/${id}`, {
+    const response = await fetch(apiUrl(`/api/servers/${id}`), {
       method: 'DELETE'
     });
     return await response.json();
@@ -97,7 +98,7 @@ export async function deleteServer(id: string): Promise<OperationResponse> {
 
 export async function startServer(id: string): Promise<OperationResponse> {
   try {
-    const response = await fetch(`/api/servers/${id}/start`, {
+    const response = await fetch(apiUrl(`/api/servers/${id}/start`), {
       method: 'POST'
     });
     return await response.json();
@@ -108,7 +109,7 @@ export async function startServer(id: string): Promise<OperationResponse> {
 
 export async function stopServer(id: string): Promise<OperationResponse> {
   try {
-    const response = await fetch(`/api/servers/${id}/stop`, {
+    const response = await fetch(apiUrl(`/api/servers/${id}/stop`), {
       method: 'POST'
     });
     return await response.json();
