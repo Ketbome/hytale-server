@@ -140,6 +140,46 @@ PANEL_USER=your_username
 PANEL_PASS=your_secure_password
 ```
 
+### SSO / Reverse Proxy Integration
+
+For Single Sign-On with Authentik, Authelia, or similar:
+
+**Option 1: Basic Auth passthrough** (recommended)
+Your SSO proxy injects `Authorization: Basic ...` header. The panel accepts it automatically.
+
+**Option 2: Disable panel auth**
+```env
+DISABLE_AUTH=true
+```
+⚠️ Only use behind a properly configured reverse proxy with authentication!
+
+### Custom URL Path
+
+To run the panel at a custom path (e.g., `https://domain.com/panel/`):
+
+```bash
+BASE_PATH=/panel docker compose up -d
+```
+
+**Nginx example:**
+```nginx
+location /panel/ {
+    proxy_pass http://hytale-panel:3000/panel/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+}
+```
+
+**Caddy example:**
+```
+domain.com {
+    handle /panel/* {
+        reverse_proxy hytale-panel:3000
+    }
+}
+```
+
 ## Configuration
 
 Copy `.env.example` to `.env` and edit:
