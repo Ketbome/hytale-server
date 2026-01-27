@@ -26,11 +26,13 @@ export interface OperationResponse {
 export async function uploadFile(
   file: File,
   targetDir: string,
+  containerName: string,
   _onProgress?: (progress: number) => void
 ): Promise<UploadResponse> {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('targetDir', targetDir);
+  formData.append('containerName', containerName);
 
   const response = await fetch(apiUrl('/api/files/upload'), {
     method: 'POST',

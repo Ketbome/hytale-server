@@ -2,6 +2,7 @@
   import { _ } from 'svelte-i18n';
   import { currentPath, fileList, editorState, openEditor, closeEditor, uploadState, FILE_ICONS, setEditorStatus } from '$lib/stores/files';
   import { serverStatus } from '$lib/stores/server';
+  import { activeServer } from '$lib/stores/servers';
   import { emit } from '$lib/services/socketClient';
   import { uploadFile } from '$lib/services/api';
   import { showToast } from '$lib/stores/ui';
@@ -109,7 +110,7 @@
     for (const file of files) {
       uploadState.update(s => ({ ...s, text: $_('uploading') + ` ${file.name}...` }));
       try {
-        const result = await uploadFile(file, $currentPath);
+        const result = await uploadFile(file, $currentPath, $activeServer!.containerName);
         if (result.success) {
           uploadState.update(s => ({ ...s, progress: 100 }));
           showToast($_('uploaded') + `: ${file.name}`);

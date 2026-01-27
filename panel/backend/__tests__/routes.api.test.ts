@@ -12,7 +12,7 @@ interface DownloadResult {
   stream?: Readable;
 }
 
-const mockUpload = jest.fn<(dir: string, name: string, data: Buffer) => Promise<UploadResult>>();
+const mockUpload = jest.fn<(dir: string, name: string, data: Buffer, containerName: string) => Promise<UploadResult>>();
 const mockDownload = jest.fn<(path: string) => Promise<DownloadResult>>();
 
 jest.unstable_mockModule('../src/services/files.js', () => ({
@@ -61,10 +61,22 @@ describe('API Routes', () => {
         .post('/api/files/upload')
         .set('Authorization', `Bearer ${validToken}`)
         .attach('file', Buffer.from('test'), 'test.txt')
-        .field('targetDir', '/config');
+        .field('targetDir', '/config')
+        .field('containerName', 'hytale-server');
 
       expect(res.status).toBe(200);
-      expect(mockUpload).toHaveBeenCalledWith('/config', 'test.txt', expect.any(Buffer));
+      expect(mockUpload).toHaveBeenCalledWith('/config', 'test.txt', expect.any(Buffer), 'hytale-server');
+    });
+
+    test('returns 400 when the container name is not provided', async () => {
+      const res = await request(app)
+        .post('/api/files/upload')
+        .set('Authorization', `Bearer ${validToken}`)
+        .attach('file', Buffer.from('test'), 'test.txt')
+        .field('targetDir', '/config');
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Container name is missing');
     });
 
     test('handles upload error', async () => {
@@ -73,7 +85,8 @@ describe('API Routes', () => {
       const res = await request(app)
         .post('/api/files/upload')
         .set('Authorization', `Bearer ${validToken}`)
-        .attach('file', Buffer.from('test'), 'test.txt');
+        .attach('file', Buffer.from('test'), 'test.txt')
+        .field('containerName', 'hytale-server');
 
       expect(res.status).toBe(500);
     });

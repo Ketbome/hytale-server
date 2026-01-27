@@ -188,8 +188,13 @@ router.post('/servers/:id/compose/regenerate', async (req, res) => {
 
 router.post('/files/upload', upload.single('file'), async (req, res) => {
   try {
-    const { targetDir } = req.body as { targetDir?: string };
+    const { targetDir, containerName } = req.body as { targetDir?: string, containerName: string };
     const file = req.file;
+
+    if (!containerName) {
+      res.status(400).json({ success: false, error: 'Container name is missing' });
+      return;
+    }
 
     if (!file) {
       res.status(400).json({ success: false, error: 'No file provided' });
@@ -201,7 +206,7 @@ router.post('/files/upload', upload.single('file'), async (req, res) => {
       return;
     }
 
-    const result = await files.upload(targetDir || '/', file.originalname, file.buffer);
+    const result = await files.upload(targetDir || '/', file.originalname, file.buffer, containerName);
 
     res.json(result);
   } catch (e) {
