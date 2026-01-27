@@ -18,6 +18,7 @@ services:
       MODTALE_API_KEY: ${MODTALE_API_KEY:-}
       DATA_PATH: /opt/hytale-panel/data
       HOST_DATA_PATH: ${HOST_DATA_PATH:-${PWD}/data/panel}
+      DISABLE_AUTH: ${DISABLE_AUTH:-false}
     volumes:
       - ./panel/backend/src:/app/backend/src
       - ./panel/frontend/src:/app/frontend/src

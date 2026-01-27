@@ -1,5 +1,6 @@
 import type { AuthStatus, DefaultsCheck, LoginResponse } from '$lib/types';
 import { writable } from 'svelte/store';
+import { apiUrl } from './config';
 
 export const isAuthenticated = writable<boolean>(false);
 export const authError = writable<string | null>(null);
@@ -9,7 +10,7 @@ export const isLoading = writable<boolean>(true);
 
 export async function checkStatus(): Promise<boolean> {
   try {
-    const res = await fetch('/auth/status');
+    const res = await fetch(apiUrl('/auth/status'));
     if (res.ok) {
       const data: AuthStatus = await res.json();
       isAuthenticated.set(data.authenticated);
@@ -26,7 +27,7 @@ export async function checkStatus(): Promise<boolean> {
 
 export async function checkDefaults(): Promise<void> {
   try {
-    const res = await fetch('/auth/check-defaults');
+    const res = await fetch(apiUrl('/auth/check-defaults'));
     const data: DefaultsCheck = await res.json();
     isUsingDefaults.set(data.usingDefaults);
     authDisabled.set(data.authDisabled);
@@ -44,7 +45,7 @@ export async function login(username: string, password: string): Promise<boolean
   }
 
   try {
-    const res = await fetch('/auth/login', {
+    const res = await fetch(apiUrl('/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -66,7 +67,7 @@ export async function login(username: string, password: string): Promise<boolean
 
 export async function logout(): Promise<void> {
   try {
-    await fetch('/auth/logout', { method: 'POST' });
+    await fetch(apiUrl('/auth/logout'), { method: 'POST' });
   } catch {
     // ignore
   }

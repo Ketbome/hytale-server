@@ -24,6 +24,7 @@ Referencia completa de todas las variables de entorno.
 | `MODTALE_API_KEY` | - | API key para integración Modtale |
 | `HOST_DATA_PATH` | - | Ruta del host para acceso directo |
 | `DISABLE_AUTH` | `false` | Deshabilitar autenticación del panel |
+| `BASE_PATH` | - | Prefijo de ruta URL (ej: `/panel`) |
 
 ## Variables de Docker
 
@@ -145,6 +146,23 @@ Solo habilita esto detrás de un reverse proxy correctamente configurado con aut
 :::
 
 El panel también soporta headers **HTTP Basic Auth**. Si tu SSO/reverse proxy inyecta headers `Authorization: Basic ...` con credenciales válidas, el panel los aceptará sin requerir login separado.
+
+### BASE_PATH
+
+Prefijo de ruta URL para montar el panel en una ubicación personalizada. Útil cuando ejecutas múltiples servicios en el mismo dominio.
+
+```bash
+BASE_PATH=/panel
+```
+
+Cuando está configurado:
+- Panel accesible en `https://dominio.com/panel/` en lugar de la raíz
+- Todas las rutas API con prefijo: `/panel/api/`, `/panel/auth/`
+- Path de Socket.IO: `/panel/socket.io`
+
+::: tip Reverse Proxy
+Configura tu reverse proxy (Nginx, Caddy, Traefik) para reenviar peticiones de `/panel/` al contenedor del panel.
+:::
 
 ## Ejemplo de Archivo .env
 

@@ -7,6 +7,8 @@
 #
 # For SSO: set DISABLE_AUTH=true if using reverse proxy auth (Authentik, etc.)
 # The panel also accepts Basic Auth headers from your proxy.
+#
+# For custom URL path: set BASE_PATH=/panel to access at domain.com/panel/
 services:
   panel:
     image: ketbom/hytale-panel:latest
@@ -24,6 +26,7 @@ services:
       DATA_PATH: /opt/hytale-panel/data
       HOST_DATA_PATH: ${HOST_DATA_PATH:-}
       DISABLE_AUTH: ${DISABLE_AUTH:-false}
+      BASE_PATH: ${BASE_PATH:-}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${HOST_DATA_PATH:-hytale-panel-data}:/opt/hytale-panel/data

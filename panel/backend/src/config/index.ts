@@ -8,6 +8,7 @@ export interface Config {
   };
   server: {
     port: number;
+    basePath: string; // Base URL path (e.g., '/panel' for domain.com/panel/)
   };
   docker: {
     socketPath: string;
@@ -44,7 +45,8 @@ const config: Config = {
     name: process.env.CONTAINER_NAME || 'hytale-server'
   },
   server: {
-    port: Number.parseInt(process.env.PANEL_PORT || '3000', 10)
+    port: Number.parseInt(process.env.PANEL_PORT || '3000', 10),
+    basePath: (process.env.BASE_PATH || '').replace(/\/+$/, '') // Remove trailing slashes
   },
   docker: {
     socketPath: '/var/run/docker.sock'

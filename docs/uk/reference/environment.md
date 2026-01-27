@@ -24,6 +24,7 @@
 | `MODTALE_API_KEY` | - | API ключ для Modtale |
 | `HOST_DATA_PATH` | - | Шлях хоста для прямого доступу |
 | `DISABLE_AUTH` | `false` | Вимкнути автентифікацію панелі |
+| `BASE_PATH` | - | Префікс шляху URL (напр., `/panel`) |
 
 ## Змінні Docker
 
@@ -145,6 +146,23 @@ DISABLE_AUTH=true
 :::
 
 Панель також підтримує заголовки **HTTP Basic Auth**. Якщо ваш SSO/reverse proxy додає заголовки `Authorization: Basic ...` з дійсними обліковими даними, панель прийме їх без окремого входу.
+
+### BASE_PATH
+
+Префікс шляху URL для монтування панелі у власному розташуванні. Корисно при запуску кількох сервісів на одному домені.
+
+```bash
+BASE_PATH=/panel
+```
+
+Коли налаштовано:
+- Панель доступна за адресою `https://domain.com/panel/` замість кореня
+- Всі маршрути API з префіксом: `/panel/api/`, `/panel/auth/`
+- Шлях Socket.IO: `/panel/socket.io`
+
+::: tip Reverse Proxy
+Налаштуйте ваш reverse proxy (Nginx, Caddy, Traefik) для переадресації запитів з `/panel/` до контейнера панелі.
+:::
 
 ## Приклад файлу .env
 

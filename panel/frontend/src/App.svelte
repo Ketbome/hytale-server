@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { isAuthenticated, checkStatus, isLoading } from '$lib/stores/auth';
+  import { loadPanelConfig } from '$lib/stores/config';
   import { activeServerId } from '$lib/stores/servers';
   import { sidebarHidden, panelExpanded } from '$lib/stores/ui';
   import { connectSocket, disconnectSocket } from '$lib/services/socketClient';
@@ -12,6 +13,8 @@
   import Toast from '$lib/components/ui/Toast.svelte';
 
   onMount(async () => {
+    // Load panel config first (for BASE_PATH)
+    await loadPanelConfig();
     const authenticated = await checkStatus();
     isLoading.set(false);
     if (authenticated) {
