@@ -43,7 +43,7 @@ panelRouter.use('/api', apiRoutes);
 if (process.env.NODE_ENV === 'production') {
   panelRouter.use(express.static(path.join(__dirname, '../../public-dist')));
   // SPA fallback - serve index.html for all non-API routes
-  panelRouter.get('*', (_req, res) => {
+  panelRouter.get('/{*any}', (_req, res) => {
     res.sendFile(path.join(__dirname, '../../public-dist/index.html'));
   });
 }
